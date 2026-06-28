@@ -1,0 +1,15 @@
+[package]
+name = "reedsolomon"
+version = "0.0.1"
+edition = "2021"
+authors = ["Julian Bolivar <jbolivarg@gmail.com>"]
+description = "Pure-Rust, no-unsafe Reed-Solomon RS(255,223) forward error correction over GF(2^8) (CCSDS)."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/BolivarTech/reedsolomon-rs"
+readme = "README.md"
+keywords = ["reed-solomon", "fec", "error-correction", "ecc", "gf256"]
+categories = ["encoding"]
+
+[dependencies]
+
+[dev-dependencies]
