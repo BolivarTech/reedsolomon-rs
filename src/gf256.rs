@@ -18,22 +18,19 @@ pub(crate) const ALPHA: u8 = 2;
 /// Number of field elements.
 ///
 /// Spec-mandated field-defining named constant (SDD: "expose all field-defining
-/// values ... field size ... as named constants"). The field tables are sized by
-/// literal `256`/`512` for `const` evaluation, so this constant currently has no
-/// direct reference; the narrow `allow` keeps the required public name without a
-/// blanket module mask.
-#[allow(dead_code)]
+/// values ... field size ... as named constants"). Used to size the `EXP` and
+/// `LOG` compile-time tables, giving the constant a real production role.
 pub(crate) const FIELD_SIZE: usize = 256;
 
-/// Antilog table: `EXP[i] = α^i`. Length 512 so `mul` never needs a modulo
-/// (two logs in `0..=254` sum to `≤ 508`). `EXP[255] = α^0 = 1`.
-pub(crate) const EXP: [u8; 512] = build_tables().0;
+/// Antilog table: `EXP[i] = α^i`. Length `2 * FIELD_SIZE` so `mul` never needs
+/// a modulo (two logs in `0..=254` sum to `≤ 508`). `EXP[255] = α^0 = 1`.
+pub(crate) const EXP: [u8; 2 * FIELD_SIZE] = build_tables().0;
 /// Log table: `LOG[α^i] = i`; `LOG[0]` is unused (0 has no log).
-pub(crate) const LOG: [u8; 256] = build_tables().1;
+pub(crate) const LOG: [u8; FIELD_SIZE] = build_tables().1;
 
-const fn build_tables() -> ([u8; 512], [u8; 256]) {
-    let mut exp = [0u8; 512];
-    let mut log = [0u8; 256];
+const fn build_tables() -> ([u8; 2 * FIELD_SIZE], [u8; FIELD_SIZE]) {
+    let mut exp = [0u8; 2 * FIELD_SIZE];
+    let mut log = [0u8; FIELD_SIZE];
     let mut x: u16 = 1;
     let mut i = 0usize;
     while i < 255 {
