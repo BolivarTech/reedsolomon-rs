@@ -87,6 +87,15 @@ mod tests {
     }
 
     #[test]
+    fn encode_is_systematic_and_right_length() {
+        let data = [1u8, 2, 3, 4, 5]; // data_len=11 => one zero-padded block
+        let out = encode_blocks(&data, 11, 4).unwrap();
+        assert_eq!(out.len(), 15, "B*n = 1*(11+4)");
+        assert_eq!(&out[..5], &data, "data preserved verbatim");
+        assert_eq!(&out[5..11], &[0u8; 6], "tail zero-padding before parity");
+    }
+
+    #[test]
     fn encode_empty_is_empty() {
         assert_eq!(encode_blocks(&[], 11, 4).unwrap(), Vec::<u8>::new());
     }
