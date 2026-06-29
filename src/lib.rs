@@ -24,8 +24,12 @@
 
 #![forbid(unsafe_code)]
 
+pub(crate) mod encode;
 pub(crate) mod gf256;
 pub(crate) mod poly;
+
+/// First consecutive root of the code generator polynomial (CCSDS convention).
+pub(crate) const FCR: usize = 112;
 
 use std::fmt;
 
