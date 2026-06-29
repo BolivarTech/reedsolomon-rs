@@ -8,6 +8,8 @@
 // reference these functions from non-test production code.
 #![allow(dead_code)]
 
+use crate::gf256;
+
 /// Evaluate `p(x)` by Horner's method.
 ///
 /// Returns the field element obtained by evaluating the polynomial `p` at `x`
@@ -22,8 +24,12 @@
 /// // constant polynomial p = [7] evaluates to 7 at any point.
 /// assert_eq!(eval(&[7], 99), 7);
 /// ```
-pub(crate) fn eval(_p: &[u8], _x: u8) -> u8 {
-    todo!("poly::eval")
+pub(crate) fn eval(p: &[u8], x: u8) -> u8 {
+    let mut acc = 0u8;
+    for &c in p {
+        acc = gf256::add(gf256::mul(acc, x), c);
+    }
+    acc
 }
 
 #[cfg(test)]
