@@ -69,7 +69,10 @@ impl std::error::Error for RsError {}
 /// `decode` error-corrects each block independently and strips chunk padding.
 #[derive(Debug, Clone, Copy)]
 pub struct ReedSolomon {
+    // Fields used by encode/decode (implemented in later tasks).
+    #[allow(dead_code)]
     parity_len: usize,
+    #[allow(dead_code)]
     data_len: usize,
 }
 

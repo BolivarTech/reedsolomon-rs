@@ -7,18 +7,32 @@
 //! Conventional-basis field built with the CCSDS field polynomial `0x187`
 //! (`x^8 + x^7 + x^2 + x + 1`) and primitive element `α = 0x02`. All multiply,
 //! divide and inverse operations use compile-time `const` log/antilog tables.
+//!
+//! All items are `pub(crate)`; they appear unused to the lib target while only
+//! referenced from tests, hence the module-level suppression below.
+#![allow(dead_code)]
 
-/// CCSDS field-generator polynomial stub — replaced in Green.
-pub(crate) const FIELD_POLY: u16 = 0;
-/// Primitive element stub — replaced in Green.
-pub(crate) const ALPHA: u8 = 0;
+/// CCSDS field-generator polynomial `x^8 + x^7 + x^2 + x + 1` (9-bit, `0x187`).
+pub(crate) const FIELD_POLY: u16 = 0x187;
+/// Primitive element generating the multiplicative group.
+pub(crate) const ALPHA: u8 = 2;
 /// Number of field elements.
 pub(crate) const FIELD_SIZE: usize = 256;
 
-/// Antilog table stub — all zeros until `build_tables` is wired.
-pub(crate) const EXP: [u8; 512] = [0u8; 512];
-/// Log table stub — all zeros until `build_tables` is wired.
-pub(crate) const LOG: [u8; 256] = [0u8; 256];
+/// Antilog table: `EXP[i] = α^i`.
+pub(crate) const EXP: [u8; 512] = build_tables().0;
+/// Log table: `LOG[α^i] = i`.
+pub(crate) const LOG: [u8; 256] = build_tables().1;
+
+/// Minimal const fn: sets `exp[0] = 1` (α^0 = identity). Other entries
+/// filled to zero pending remaining invariant tests.
+const fn build_tables() -> ([u8; 512], [u8; 256]) {
+    let mut exp = [0u8; 512];
+    let log = [0u8; 256];
+    // α^0 = 1: the identity of the multiplicative group.
+    exp[0] = 1;
+    (exp, log)
+}
 
 #[cfg(test)]
 mod tests {
