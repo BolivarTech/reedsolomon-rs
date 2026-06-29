@@ -124,4 +124,17 @@ mod tests {
             Err(crate::RsError::InvalidInput(_))
         ));
     }
+
+    #[test]
+    fn framed_rejects_unsupported_version() {
+        let rs = ReedSolomon::default();
+        let mut framed = encode_framed(&rs, b"hello").unwrap();
+        framed[2] = FRAME_VERSION + 1; // future version, then re-seal the CRC so
+        let crc = crate::crc::crc32(&framed[..13]); // only the version check rejects.
+        framed[13..17].copy_from_slice(&crc.to_be_bytes());
+        assert!(matches!(
+            decode_framed(&rs, &framed),
+            Err(crate::RsError::InvalidInput(_))
+        ));
+    }
 }
