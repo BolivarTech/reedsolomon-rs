@@ -6,6 +6,48 @@
 //! `(version, parity_len, data_len, original_len)` wraps the raw codewords so
 //! `decode_framed` rejects parameter mismatch and reads the true length.
 
+use crate::crc::crc32;
+use crate::{ReedSolomon, RsError};
+
+/// Frame magic bytes (`"RS"`).
+pub(crate) const FRAME_MAGIC: [u8; 2] = [0x52, 0x53];
+/// Frame format version.
+pub(crate) const FRAME_VERSION: u8 = 1;
+/// Fixed header length: magic(2) + version(1) + parity(1) + data(1) + len(8) + crc(4).
+pub(crate) const FRAME_HEADER_LEN: usize = 17;
+
+/// Encode `data` with a self-describing header.
+pub(crate) fn encode_framed(rs: &ReedSolomon, data: &[u8]) -> Result<Vec<u8>, RsError> {
+    let body = rs.encode(data)?;
+    let mut header = [0u8; FRAME_HEADER_LEN];
+    header[0] = FRAME_MAGIC[0];
+    header[1] = FRAME_MAGIC[1];
+    header[2] = FRAME_VERSION;
+    header[3] = rs.parity_len() as u8; // parity_len, data_len are always <= 254
+    header[4] = rs.data_len() as u8;
+    header[5..13].copy_from_slice(&(data.len() as u64).to_be_bytes());
+    let crc = crc32(&header[..13]);
+    header[13..17].copy_from_slice(&crc.to_be_bytes());
+
+    let mut out = Vec::new();
+    out.try_reserve(FRAME_HEADER_LEN + body.len())
+        .map_err(|_| RsError::InvalidInput("framed allocation too large".into()))?;
+    out.extend_from_slice(&header);
+    out.extend_from_slice(&body);
+    Ok(out)
+}
+
+/// Decode a framed stream; reject header/parameter inconsistencies as `InvalidInput`.
+pub(crate) fn decode_framed(rs: &ReedSolomon, framed: &[u8]) -> Result<Vec<u8>, RsError> {
+    let h = &framed[..FRAME_HEADER_LEN];
+    let original_len_u64 = u64::from_be_bytes(h[5..13].try_into().expect("8 bytes"));
+    // Reject (never silently truncate) a length that does not fit usize — only
+    // possible on 32-bit targets where usize < u64.
+    let original_len = usize::try_from(original_len_u64)
+        .map_err(|_| RsError::InvalidInput("framed original_len exceeds usize".into()))?;
+    rs.decode(&framed[FRAME_HEADER_LEN..], original_len)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

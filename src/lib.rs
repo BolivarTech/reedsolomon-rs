@@ -22,14 +22,23 @@
 //! encoding and a syndromes → inversionless Berlekamp-Massey → Chien → Forney
 //! decoder with mandatory post-correction syndrome verification.
 //!
+//! ## Framed format
+//!
+//! [`ReedSolomon::encode_framed`] / [`ReedSolomon::decode_framed`] add a
+//! CRC-checked, self-describing 17-byte header in front of the raw codewords so
+//! a decoder can reject a code-parameter mismatch and recover the true
+//! `original_len` without the caller tracking either out of band. The raw
+//! [`ReedSolomon::encode`] / [`ReedSolomon::decode`] path is unchanged and
+//! carries zero overhead.
+//!
 //! [`cryptovault`]: https://crates.io/crates/cryptovault
 
 #![forbid(unsafe_code)]
 
 pub(crate) mod crc;
 pub(crate) mod decode;
-mod frame;
 pub(crate) mod encode;
+mod frame;
 pub(crate) mod gf256;
 pub(crate) mod poly;
 
@@ -138,6 +147,41 @@ impl ReedSolomon {
     pub fn decode(&self, encoded: &[u8], original_len: usize) -> Result<Vec<u8>, RsError> {
         crate::decode::decode_blocks(encoded, original_len, self.data_len, self.parity_len)
     }
+
+    /// Number of parity bytes appended per `data_len`-byte chunk.
+    pub(crate) fn parity_len(&self) -> usize {
+        self.parity_len
+    }
+
+    /// Number of data bytes per chunk (`k` in RS(*n*, *k*)).
+    pub(crate) fn data_len(&self) -> usize {
+        self.data_len
+    }
+
+    /// Encode with a self-describing, CRC-checked header (see crate docs). The
+    /// header carries the code parameters and original length so `decode_framed`
+    /// rejects a parameter mismatch instead of silently mis-decoding, closing the
+    /// caller footguns of a parameter mismatch and an externally tracked
+    /// `original_len`.
+    ///
+    /// # Errors
+    /// [`RsError::InvalidInput`] if the framed output allocation fails; otherwise
+    /// propagates any error from [`Self::encode`].
+    pub fn encode_framed(&self, data: &[u8]) -> Result<Vec<u8>, RsError> {
+        crate::frame::encode_framed(self, data)
+    }
+
+    /// Decode a framed stream produced by [`Self::encode_framed`]. The embedded
+    /// header removes the parameter-match and `original_len` footguns of the raw
+    /// [`Self::decode`] path.
+    ///
+    /// # Errors
+    /// [`RsError::InvalidInput`] on a short / bad-magic / bad-version / CRC-fail
+    /// header or a code-parameter mismatch; [`RsError::Uncorrectable`] when a
+    /// block exceeds the correction capacity.
+    pub fn decode_framed(&self, framed: &[u8]) -> Result<Vec<u8>, RsError> {
+        crate::frame::decode_framed(self, framed)
+    }
 }
 
 #[cfg(test)]
@@ -183,6 +227,14 @@ mod tests {
             enc[i * 3] ^= 0x5A;
         } // 16 errors in the single block
         assert_eq!(rs.decode(&enc, msg.len()).unwrap(), msg);
+    }
+
+    #[test]
+    fn public_framed_methods_round_trip() {
+        let rs = ReedSolomon::default();
+        let msg = b"public framed api";
+        let framed = rs.encode_framed(msg).unwrap();
+        assert_eq!(rs.decode_framed(&framed).unwrap(), msg);
     }
 
     #[test]

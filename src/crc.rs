@@ -27,10 +27,7 @@ const TABLE: [u32; 256] = build_table();
 
 /// CRC-32/IEEE (reflected, init `0xFFFFFFFF`, final XOR `0xFFFFFFFF`).
 ///
-/// Used by `src/frame.rs` (Task 11B) to integrity-check the framed-format
-/// header.
-// used by src/frame.rs (Task 11B)
-#[allow(dead_code)]
+/// Used by `src/frame.rs` to integrity-check the framed-format header.
 pub(crate) fn crc32(data: &[u8]) -> u32 {
     let mut crc = 0xFFFF_FFFFu32;
     for &b in data {
