@@ -261,6 +261,24 @@ mod tests {
         div(1, 0);
     }
 
+    /// `pow` must not overflow for very large exponents; the multiplicative
+    /// group has order 255, so `base^exp == base^(exp % 255)` for any non-zero
+    /// `base`. Verifies the periodicity property and that `usize::MAX` does not
+    /// produce an arithmetic overflow panic.
+    #[test]
+    fn pow_handles_large_exponent_without_overflow() {
+        // Periodicity: base^(255+k) == base^k
+        assert_eq!(pow(3, 255 + 5), pow(3, 5), "pow(3, 255+5) == pow(3, 5)");
+        // Group order: α^255 == 1
+        assert_eq!(pow(2, 255), 1, "alpha^255 == 1");
+        // Very large exponent — LOG[base]*exp overflows usize with the old formula
+        assert_eq!(
+            pow(3, usize::MAX),
+            pow(3, usize::MAX % 255),
+            "pow(3, usize::MAX) must equal pow(3, usize::MAX % 255)"
+        );
+    }
+
     /// `pow` edge cases: x^0 == 1, 0^e == 0 for e>0, α^255 == 1 (order),
     /// and `pow(b, e)` matches iterative `mul` for all small exponents.
     #[test]
