@@ -35,4 +35,13 @@ mod tests {
         let s = syndromes(&enc, 4);
         assert!(all_zero(&s), "valid codeword => zero syndromes");
     }
+
+    #[test]
+    fn single_error_gives_nonzero_syndromes() {
+        let data = [9u8, 8, 7, 6, 5, 4, 3, 2, 1, 0, 11];
+        let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        enc[3] ^= 0x5A;
+        let s = syndromes(&enc, 4);
+        assert!(!all_zero(&s));
+    }
 }
