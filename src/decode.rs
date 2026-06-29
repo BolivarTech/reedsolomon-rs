@@ -24,6 +24,11 @@ pub(crate) fn all_zero(s: &[u8]) -> bool {
     s.iter().all(|&b| b == 0)
 }
 
+/// Stub (Red phase): real inversionless Berlekamp-Massey lands in Green.
+pub(crate) fn berlekamp_massey(_synd: &[u8], _t: usize) -> Vec<u8> {
+    vec![1]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -43,5 +48,17 @@ mod tests {
         enc[3] ^= 0x5A;
         let s = syndromes(&enc, 4);
         assert!(!all_zero(&s));
+    }
+
+    #[test]
+    fn bm_locator_degree_matches_single_error() {
+        // one error => deg(Lambda) == 1
+        let data = [1u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        enc[2] ^= 0x33;
+        let s = syndromes(&enc, 4);
+        let lambda = berlekamp_massey(&s, 2);
+        let degree = lambda.len() - 1 - lambda.iter().take_while(|&&c| c == 0).count();
+        assert_eq!(degree, 1, "exactly one error");
     }
 }
