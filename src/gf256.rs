@@ -119,7 +119,7 @@ pub(crate) fn pow(base: u8, exp: usize) -> u8 {
     } else if base == 0 {
         0
     } else {
-        EXP[(LOG[base as usize] as usize * exp) % 255]
+        EXP[(LOG[base as usize] as usize * (exp % 255)) % 255]
     }
 }
 
