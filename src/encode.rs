@@ -142,4 +142,10 @@ mod tests {
         assert_eq!(encoded_len(0, 11, 4), Some(0));
         assert_eq!(encoded_len(25, 11, 4), Some(45));
     }
+
+    #[test]
+    fn encoded_len_zero_data_len_returns_none() {
+        // data_len=0 must return None rather than underflow-panicking on `data_len - 1`.
+        assert!(encoded_len(10, 0, 4).is_none());
+    }
 }
