@@ -52,4 +52,14 @@ mod tests {
             assert_eq!(crate::poly::eval(&g, root), 0, "g(alpha^(FCR+i)) == 0");
         }
     }
+
+    #[test]
+    fn encode_rejects_length_overflow() {
+        // data_len=1, parity_len=254 => n=255; a len near usize::MAX overflows B*n.
+        // Use a fake huge len via a zero-length slice is impossible; assert the
+        // checked-arithmetic helper directly (see encoded_len).
+        assert!(encoded_len(usize::MAX, 1, 254).is_none());
+        assert_eq!(encoded_len(0, 11, 4), Some(0));
+        assert_eq!(encoded_len(25, 11, 4), Some(45));
+    }
 }
