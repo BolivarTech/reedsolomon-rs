@@ -85,10 +85,21 @@ pub(crate) fn berlekamp_massey(synd: &[u8], _t: usize) -> Vec<u8> {
     be
 }
 
-/// Chien search stub (Red phase: no real logic yet).
+/// Chien search: return the byte positions `j in 0..n` whose locator value
+/// `X = α^{n-1-j}` is an error location (`Λ(X^{-1}) == 0`). Only positions
+/// inside `[0, n)` are returned; "phantom" roots of shortened codes are dropped
+/// here and surface as a degree/root-count mismatch in `decode_block`.
 pub(crate) fn chien_search(lambda: &[u8], n: usize) -> Vec<usize> {
-    let _ = (lambda, n);
-    Vec::new()
+    let mut positions = Vec::new();
+    for j in 0..n {
+        // X = alpha^(n-1-j); X^{-1} = alpha^(-(n-1-j)) = alpha^(255-((n-1-j)%255))
+        let exp_inv = (255 - ((n - 1 - j) % 255)) % 255;
+        let x_inv = gf256::pow(gf256::ALPHA, exp_inv);
+        if poly::eval(lambda, x_inv) == 0 {
+            positions.push(j);
+        }
+    }
+    positions
 }
 
 #[cfg(test)]
