@@ -26,6 +26,7 @@
 
 #![forbid(unsafe_code)]
 
+pub(crate) mod crc;
 pub(crate) mod decode;
 pub(crate) mod encode;
 pub(crate) mod gf256;
