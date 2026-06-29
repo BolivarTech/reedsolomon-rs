@@ -89,4 +89,19 @@ mod tests {
             Err(crate::RsError::InvalidInput(_))
         ));
     }
+
+    #[test]
+    fn framed_rejects_corrupted_header() {
+        let rs = ReedSolomon::default();
+        let msg = b"hello";
+        let mut framed = encode_framed(&rs, msg).unwrap();
+        // Flip the low byte of `original_len` (5 -> 4): a still-valid length that,
+        // absent the header CRC, would silently mis-decode to "hell". The CRC must
+        // catch this and reject the frame as `InvalidInput`.
+        framed[12] ^= 0x01;
+        assert!(matches!(
+            decode_framed(&rs, &framed),
+            Err(crate::RsError::InvalidInput(_))
+        ));
+    }
 }
