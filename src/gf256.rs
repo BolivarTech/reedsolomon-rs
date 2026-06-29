@@ -59,4 +59,12 @@ mod tests {
     fn multiplicative_order_is_255() {
         assert_eq!(EXP[255], 1, "multiplicative order is 255");
     }
+
+    /// Round-trip: `EXP[LOG[x]] == x` for every non-zero field element.
+    #[test]
+    fn exp_log_roundtrip_for_all_nonzero_elements() {
+        for x in 1u16..256 {
+            assert_eq!(EXP[LOG[x as usize] as usize], x as u8, "exp(log(x)) == x for x={x}");
+        }
+    }
 }
