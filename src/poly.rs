@@ -91,8 +91,19 @@ pub(crate) fn mul(a: &[u8], b: &[u8]) -> Vec<u8> {
 ///
 /// # Panics
 /// Debug-asserts that `divisor[0] == 1`.
-pub(crate) fn remainder(_dividend: &[u8], _divisor: &[u8]) -> Vec<u8> {
-    todo!("poly::remainder")
+pub(crate) fn remainder(dividend: &[u8], divisor: &[u8]) -> Vec<u8> {
+    debug_assert!(divisor.first() == Some(&1), "divisor must be monic");
+    let mut work = dividend.to_vec();
+    let dl = divisor.len();
+    for i in 0..work.len().saturating_sub(dl - 1) {
+        let coef = work[i];
+        if coef != 0 {
+            for j in 1..dl {
+                work[i + j] = gf256::add(work[i + j], gf256::mul(divisor[j], coef));
+            }
+        }
+    }
+    work[work.len() - (dl - 1)..].to_vec()
 }
 
 #[cfg(test)]
