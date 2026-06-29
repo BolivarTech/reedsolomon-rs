@@ -65,6 +65,11 @@ mod tests {
     }
 
     #[test]
+    fn encode_empty_is_empty() {
+        assert_eq!(encode_blocks(&[], 11, 4).unwrap(), Vec::<u8>::new());
+    }
+
+    #[test]
     fn encode_rejects_length_overflow() {
         // data_len=1, parity_len=254 => n=255; a len near usize::MAX overflows B*n.
         // Use a fake huge len via a zero-length slice is impossible; assert the
