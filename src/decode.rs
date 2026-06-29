@@ -24,9 +24,65 @@ pub(crate) fn all_zero(s: &[u8]) -> bool {
     s.iter().all(|&b| b == 0)
 }
 
-/// Stub (Red phase): real inversionless Berlekamp-Massey lands in Green.
-pub(crate) fn berlekamp_massey(_synd: &[u8], _t: usize) -> Vec<u8> {
-    vec![1]
+/// Inversionless Berlekamp-Massey. `synd[s] = S_s` (the `2t` syndromes).
+/// Returns Λ (big-endian). Λ may be scaled by a nonzero constant — this does
+/// **not** affect Chien roots nor the Forney ratio `Ω/Λ'`, so no normalization
+/// is needed.
+///
+/// Genuinely inversionless recurrence (no GF inverse in the loop, only
+/// `add`/`mul`): `Λ*(x) = γ·Λ(x) − δ·x·B(x)`; on a length change
+/// `B←Λ, L←r+1−L, γ←δ`, otherwise `B←x·B`. Internally low-endian (index =
+/// degree), converted to big-endian at the end. KAT-pinned (Task 12).
+pub(crate) fn berlekamp_massey(synd: &[u8], _t: usize) -> Vec<u8> {
+    // Low-endian (index = degree). Inversionless: replace `d/b` by carrying the
+    // last discrepancy `gamma` and scaling Λ by it. Shift is the EXPLICIT `x^m`.
+    let n = synd.len();
+    let mut lambda = vec![0u8; n + 1];
+    lambda[0] = 1;
+    let mut b = vec![0u8; n + 1];
+    b[0] = 1;
+    let mut l = 0usize;
+    let mut m = 1usize; // current shift exponent x^m
+    let mut gamma = 1u8; // last nonzero discrepancy
+    for r in 0..n {
+        // discrepancy δ = Σ_{i=0..l} Λ_i · S_{r-i}
+        let mut delta = 0u8;
+        for i in 0..=l {
+            if i <= r {
+                delta = gf256::add(delta, gf256::mul(lambda[i], synd[r - i]));
+            }
+        }
+        if delta == 0 {
+            m += 1;
+        } else {
+            // Λ <- γ·Λ − δ·x^m·B   (no inverse; subtraction == XOR)
+            let prev = lambda.clone(); // un-scaled old Λ (becomes B on length change)
+            for c in lambda.iter_mut() {
+                *c = gf256::mul(gamma, *c);
+            }
+            for k in 0..b.len() {
+                if k + m < lambda.len() {
+                    lambda[k + m] = gf256::add(lambda[k + m], gf256::mul(delta, b[k]));
+                }
+            }
+            if 2 * l <= r {
+                l = r + 1 - l;
+                b = prev;
+                gamma = delta;
+                m = 1;
+            } else {
+                m += 1;
+            }
+        }
+    }
+    // trim high-degree zeros (low-endian), then convert to big-endian
+    let mut deg = lambda.len() - 1;
+    while deg > 0 && lambda[deg] == 0 {
+        deg -= 1;
+    }
+    let mut be = lambda[..=deg].to_vec();
+    be.reverse();
+    be
 }
 
 #[cfg(test)]
