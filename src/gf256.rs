@@ -221,6 +221,14 @@ mod tests {
         }
     }
 
+    /// `inv(0)` must panic — 0 has no multiplicative inverse in GF(2^8) and
+    /// the codec must fail loud (not silently return a wrong value).
+    #[test]
+    #[should_panic(expected = "gf256::inv(0) is undefined")]
+    fn inv_of_zero_panics() {
+        inv(0);
+    }
+
     /// `div(a, b)` equals `mul(a, inv(b))` for all non-zero `b`; zero
     /// dividend always yields zero.
     #[test]
@@ -235,6 +243,13 @@ mod tests {
                 );
             }
         }
+    }
+
+    /// `div(a, 0)` must panic — dividing by zero is undefined in any field.
+    #[test]
+    #[should_panic(expected = "gf256::div by zero")]
+    fn div_by_zero_panics() {
+        div(1, 0);
     }
 
     /// `pow` edge cases: x^0 == 1, 0^e == 0 for e>0, α^255 == 1 (order),
