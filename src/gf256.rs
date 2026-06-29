@@ -85,4 +85,91 @@ mod tests {
             );
         }
     }
+
+    /// Multiplying any element by zero must yield zero (zero is the absorbing
+    /// element of the multiplicative group extended to all of GF(2^8)).
+    #[test]
+    fn mul_zero_absorbs() {
+        assert_eq!(mul(0, 123), 0);
+        assert_eq!(mul(123, 0), 0);
+        assert_eq!(mul(0, 0), 0);
+    }
+
+    /// The multiplicative identity element is 1: `mul(1, x) == x` for all x.
+    #[test]
+    fn mul_identity() {
+        for x in 0u16..256 {
+            assert_eq!(mul(1, x as u8), x as u8, "1 * {x} == {x}");
+            assert_eq!(mul(x as u8, 1), x as u8, "{x} * 1 == {x}");
+        }
+    }
+
+    /// GF(2^8) multiplication must be commutative for every pair of elements.
+    #[test]
+    fn mul_commutative() {
+        for a in 0u16..256 {
+            for b in 0u16..256 {
+                assert_eq!(
+                    mul(a as u8, b as u8),
+                    mul(b as u8, a as u8),
+                    "mul({a},{b}) != mul({b},{a})"
+                );
+            }
+        }
+    }
+
+    /// `mul` is distributive over `add`: `a*(b+c) == a*b + a*c` for all
+    /// elements in the field.
+    #[test]
+    fn mul_distributive_over_add() {
+        for a in 0u16..256 {
+            for b in 0u16..256 {
+                for c in [0u8, 1, 2, 17, 200, 255] {
+                    let lhs = mul(a as u8, add(b as u8, c));
+                    let rhs = add(mul(a as u8, b as u8), mul(a as u8, c));
+                    assert_eq!(lhs, rhs, "distributive failed: {a}*({b}+{c})");
+                }
+            }
+        }
+    }
+
+    /// For every non-zero element `x`, `mul(x, inv(x)) == 1`.
+    #[test]
+    fn inv_times_element_is_one() {
+        for a in 1u16..256 {
+            assert_eq!(mul(a as u8, inv(a as u8)), 1, "x * inv(x) == 1 failed for x={a}");
+        }
+    }
+
+    /// `div(a, b)` equals `mul(a, inv(b))` for all non-zero `b`; zero
+    /// dividend always yields zero.
+    #[test]
+    fn div_consistent_with_mul_inv() {
+        assert_eq!(div(0, 7), 0);
+        for a in 0u16..256 {
+            for b in 1u16..256 {
+                assert_eq!(
+                    div(a as u8, b as u8),
+                    mul(a as u8, inv(b as u8)),
+                    "div({a},{b}) != mul({a}, inv({b}))"
+                );
+            }
+        }
+    }
+
+    /// `pow` edge cases: x^0 == 1, 0^e == 0 for e>0, α^255 == 1 (order),
+    /// and `pow(b, e)` matches iterative `mul` for all small exponents.
+    #[test]
+    fn pow_edge_cases_and_matches_repeated_mul() {
+        assert_eq!(pow(0, 0), 1, "0^0 == 1 by convention");
+        assert_eq!(pow(7, 0), 1, "x^0 == 1");
+        assert_eq!(pow(0, 5), 0, "0^e == 0 for e>0");
+        assert_eq!(pow(ALPHA, 255), 1, "α^255 == 1 (multiplicative order)");
+        // Verify pow matches iterative mul for base=3 up to exponent 299.
+        let mut acc = 1u8;
+        for e in 0..300usize {
+            assert_eq!(pow(3, e), acc, "pow(3,{e}) != iterative mul");
+            acc = mul(acc, 3);
+        }
+    }
 }
