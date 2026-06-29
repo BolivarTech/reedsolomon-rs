@@ -117,7 +117,7 @@ impl ReedSolomon {
     /// Encodes `data` into RS codewords (data chunks + parity).
     ///
     /// TODO: native GF(2^8) systematic encoder.
-    pub fn encode(&self, _data: &[u8]) -> Vec<u8> {
+    pub fn encode(&self, _data: &[u8]) -> Result<Vec<u8>, RsError> {
         todo!("native GF(2^8) RS encoder")
     }
 
@@ -157,6 +157,12 @@ mod tests {
         assert_eq!(rs.parity_len, 32);
     }
 
-    // TODO: round-trip KATs, corrupt-<=16-per-block recovery,
-    // >16-errors-declares-failure (no mis-correction), and fuzzing.
+    #[test]
+    fn default_round_trips_short_payload() {
+        let rs = ReedSolomon::default();
+        let msg = b"the quick brown fox";
+        let enc = rs.encode(msg).unwrap();
+        let dec = rs.decode(&enc, msg.len()).unwrap();
+        assert_eq!(dec, msg);
+    }
 }
