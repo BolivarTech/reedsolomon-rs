@@ -67,8 +67,17 @@ pub(crate) fn add(a: &[u8], b: &[u8]) -> Vec<u8> {
 ///
 /// # Parameters
 /// - `a`, `b`: polynomials in big-endian order.
-pub(crate) fn mul(_a: &[u8], _b: &[u8]) -> Vec<u8> {
-    todo!("poly::mul")
+pub(crate) fn mul(a: &[u8], b: &[u8]) -> Vec<u8> {
+    if a.is_empty() || b.is_empty() {
+        return Vec::new();
+    }
+    let mut out = vec![0u8; a.len() + b.len() - 1];
+    for (i, &ca) in a.iter().enumerate() {
+        for (j, &cb) in b.iter().enumerate() {
+            out[i + j] = gf256::add(out[i + j], gf256::mul(ca, cb));
+        }
+    }
+    out
 }
 
 #[cfg(test)]
