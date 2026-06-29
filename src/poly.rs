@@ -41,6 +41,17 @@ pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
     p.iter().map(|&c| gf256::mul(c, s)).collect()
 }
 
+/// Add two big-endian polynomials, aligning them by their lowest-degree
+/// (right-most) term.
+///
+/// The result has `max(a.len(), b.len())` coefficients.
+///
+/// # Parameters
+/// - `a`, `b`: polynomials in big-endian order.
+pub(crate) fn add(_a: &[u8], _b: &[u8]) -> Vec<u8> {
+    todo!("poly::add")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -59,5 +70,15 @@ mod tests {
         let result = scale(&p, s);
         let expected: Vec<u8> = p.iter().map(|&c| crate::gf256::mul(c, s)).collect();
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn add_aligns_big_endian_polynomials_by_degree() {
+        // (x + 1) + (x^2 + x + 1) = x^2 + 0x + 0  (in GF(2), 1^1=0)
+        // big-endian: [1,1] + [1,1,1] => [1, 0, 0]
+        let a = [1u8, 1]; // x + 1
+        let b = [1u8, 1, 1]; // x^2 + x + 1
+        let result = add(&a, &b);
+        assert_eq!(result, vec![1u8, 0, 0]);
     }
 }
