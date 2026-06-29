@@ -1,4 +1,4 @@
-﻿// Author: Julian Bolivar
+// Author: Julian Bolivar
 // Version: 0.1.0
 // Date: 2026-06-29
 
@@ -27,42 +27,6 @@ pub(crate) fn eval(p: &[u8], x: u8) -> u8 {
         acc = gf256::add(gf256::mul(acc, x), c);
     }
     acc
-}
-
-/// Multiply every coefficient of `p` by the scalar `s` in GF(2^8).
-///
-/// # Parameters
-/// - `p`: input polynomial (big-endian).
-/// - `s`: scalar multiplier.
-// Part of the GF(2^8) polynomial toolkit (unit-tested); the current decoder uses
-// inline `gf256` ops instead of this helper, so it has no production caller yet.
-// Narrow `allow` instead of a blanket module mask; see Task 11 report.
-#[allow(dead_code)]
-pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
-    p.iter().map(|&c| gf256::mul(c, s)).collect()
-}
-
-/// Add two big-endian polynomials, aligning them by their lowest-degree
-/// (right-most) term.
-///
-/// The result has `max(a.len(), b.len())` coefficients.
-///
-/// # Parameters
-/// - `a`, `b`: polynomials in big-endian order.
-// Part of the GF(2^8) polynomial toolkit (unit-tested); the current decoder adds
-// polynomials inline via `gf256::add`, so this slice-level helper has no
-// production caller yet. Narrow `allow` instead of a blanket module mask.
-#[allow(dead_code)]
-pub(crate) fn add(a: &[u8], b: &[u8]) -> Vec<u8> {
-    let n = a.len().max(b.len());
-    let mut out = vec![0u8; n];
-    for (i, &c) in a.iter().rev().enumerate() {
-        out[n - 1 - i] = c;
-    }
-    for (i, &c) in b.iter().rev().enumerate() {
-        out[n - 1 - i] = gf256::add(out[n - 1 - i], c);
-    }
-    out
 }
 
 /// Multiply two polynomials over GF(2^8).
@@ -130,26 +94,6 @@ mod tests {
             5,
         );
         assert_eq!(eval(&p, 2), expected); // expected == 7
-    }
-
-    #[test]
-    fn scale_multiplies_every_coefficient_by_scalar() {
-        // scale([1, 2, 3], 0x02) must equal [mul(1,2), mul(2,2), mul(3,2)].
-        let p = [1u8, 2, 3];
-        let s = 2u8;
-        let result = scale(&p, s);
-        let expected: Vec<u8> = p.iter().map(|&c| crate::gf256::mul(c, s)).collect();
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn add_aligns_big_endian_polynomials_by_degree() {
-        // (x + 1) + (x^2 + x + 1) = x^2 + 0x + 0  (in GF(2), 1^1=0)
-        // big-endian: [1,1] + [1,1,1] => [1, 0, 0]
-        let a = [1u8, 1]; // x + 1
-        let b = [1u8, 1, 1]; // x^2 + x + 1
-        let result = add(&a, &b);
-        assert_eq!(result, vec![1u8, 0, 0]);
     }
 
     #[test]
