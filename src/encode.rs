@@ -25,7 +25,7 @@ pub(crate) fn encoded_len(len: usize, data_len: usize, parity_len: usize) -> Opt
     if len == 0 {
         return Some(0);
     }
-    let blocks = len.checked_add(data_len - 1)? / data_len; // ceil division
+    let blocks = len.checked_add(data_len.checked_sub(1)?)? / data_len; // ceil division
     let n = data_len.checked_add(parity_len)?;
     blocks.checked_mul(n)
 }
