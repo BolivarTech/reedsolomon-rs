@@ -1,4 +1,4 @@
-// Author: Julian Bolivar
+﻿// Author: Julian Bolivar
 // Version: 0.1.0
 // Date: 2026-06-29
 
@@ -114,6 +114,17 @@ mod tests {
     fn eval_constant_poly_returns_constant() {
         // A single-coefficient polynomial is a constant: p(x) = 7 for all x.
         assert_eq!(eval(&[7], 99), 7);
+
+        // p(x) = x^2 + 3x + 5 (big-endian [1,3,5]); eval at x=2 must equal 7
+        let p = [1u8, 3, 5];
+        let expected = crate::gf256::add(
+            crate::gf256::add(
+                crate::gf256::mul(1, crate::gf256::mul(2, 2)),
+                crate::gf256::mul(3, 2),
+            ),
+            5,
+        );
+        assert_eq!(eval(&p, 2), expected); // expected == 7
     }
 
     #[test]
@@ -142,14 +153,8 @@ mod tests {
         let divisor = [1u8, 1, 1]; // x^2 + x + 1 (monic)
         let r = remainder(&dividend, &divisor);
         assert_eq!(r.len(), divisor.len() - 1);
-        // x^4 mod (x^2+x+1): verify dividend == q*divisor + r by evaluation
-        for x in 0u16..256 {
-            let x = x as u8;
-            // (dividend - r) must be divisible by divisor => eval at roots is 0;
-            // simpler: eval(dividend) == eval(q)*eval(divisor) + eval(r) is not
-            // directly checkable without q, so check residue property via re-add.
-            let _ = x;
-        }
+        // x^4 mod (x^2+x+1) over GF(2^8) = x, big-endian [1, 0]
+        assert_eq!(r, vec![1u8, 0u8]);
     }
 
     #[test]
