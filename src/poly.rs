@@ -4,9 +4,6 @@
 
 //! Polynomials over GF(2^8), stored **big-endian**: index 0 is the
 //! highest-degree coefficient.
-// Suppress dead_code lint until encode/decode modules (later tasks)
-// reference these functions from non-test production code.
-#![allow(dead_code)]
 
 use crate::gf256;
 
@@ -37,6 +34,10 @@ pub(crate) fn eval(p: &[u8], x: u8) -> u8 {
 /// # Parameters
 /// - `p`: input polynomial (big-endian).
 /// - `s`: scalar multiplier.
+// Part of the GF(2^8) polynomial toolkit (unit-tested); the current decoder uses
+// inline `gf256` ops instead of this helper, so it has no production caller yet.
+// Narrow `allow` instead of a blanket module mask; see Task 11 report.
+#[allow(dead_code)]
 pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
     p.iter().map(|&c| gf256::mul(c, s)).collect()
 }
@@ -48,6 +49,10 @@ pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
 ///
 /// # Parameters
 /// - `a`, `b`: polynomials in big-endian order.
+// Part of the GF(2^8) polynomial toolkit (unit-tested); the current decoder adds
+// polynomials inline via `gf256::add`, so this slice-level helper has no
+// production caller yet. Narrow `allow` instead of a blanket module mask.
+#[allow(dead_code)]
 pub(crate) fn add(a: &[u8], b: &[u8]) -> Vec<u8> {
     let n = a.len().max(b.len());
     let mut out = vec![0u8; n];

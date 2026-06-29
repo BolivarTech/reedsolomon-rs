@@ -9,16 +9,20 @@
 //! divide and inverse operations use compile-time `const` log/antilog tables.
 //!
 //! All items are `pub(crate)` and consumed by the codec modules (`poly`,
-//! `encode`, `decode`) that are added in subsequent tasks.
-// Suppress dead_code lint until the poly/encode/decode modules (later tasks)
-// reference these functions from non-test code.
-#![allow(dead_code)]
+//! `encode`, `decode`).
 
 /// CCSDS field-generator polynomial `x^8 + x^7 + x^2 + x + 1` (9-bit, `0x187`).
 pub(crate) const FIELD_POLY: u16 = 0x187;
 /// Primitive element generating the multiplicative group.
 pub(crate) const ALPHA: u8 = 2;
 /// Number of field elements.
+///
+/// Spec-mandated field-defining named constant (SDD: "expose all field-defining
+/// values ... field size ... as named constants"). The field tables are sized by
+/// literal `256`/`512` for `const` evaluation, so this constant currently has no
+/// direct reference; the narrow `allow` keeps the required public name without a
+/// blanket module mask.
+#[allow(dead_code)]
 pub(crate) const FIELD_SIZE: usize = 256;
 
 /// Antilog table: `EXP[i] = α^i`. Length 512 so `mul` never needs a modulo

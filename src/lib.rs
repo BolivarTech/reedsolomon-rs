@@ -1,6 +1,6 @@
 // Author: Julian Bolivar
-// Version: 0.0.1
-// Date: 2026-06-28
+// Version: 0.1.0
+// Date: 2026-06-29
 
 //! # reedsolomon
 //!
@@ -15,10 +15,12 @@
 //! primitive (it operates on ciphertext, carries no secrets, and has no
 //! secret-dependent timing).
 //!
-//! ## Status: WORK IN PROGRESS (name-reservation scaffold)
+//! ## Status: native codec wired
 //!
-//! The public API below is the contract; the GF(2^8) implementation is being
-//! written natively to remove any third-party FEC dependency.
+//! The public [`ReedSolomon::encode`] / [`ReedSolomon::decode`] now delegate to
+//! the native GF(2^8) block codec (no third-party FEC dependency): systematic
+//! encoding and a syndromes → inversionless Berlekamp-Massey → Chien → Forney
+//! decoder with mandatory post-correction syndrome verification.
 //!
 //! [`cryptovault`]: https://crates.io/crates/cryptovault
 
@@ -75,10 +77,9 @@ impl std::error::Error for RsError {}
 /// `decode` error-corrects each block independently and strips chunk padding.
 #[derive(Debug, Clone, Copy)]
 pub struct ReedSolomon {
-    // Fields used by encode/decode (implemented in later tasks).
-    #[allow(dead_code)]
+    /// Number of parity bytes appended per `data_len`-byte chunk.
     parity_len: usize,
-    #[allow(dead_code)]
+    /// Number of data bytes per chunk (`k` in RS(*n*, *k*)).
     data_len: usize,
 }
 
@@ -187,8 +188,8 @@ mod tests {
         let rs = ReedSolomon::default();
         let msg = vec![0x11u8; 223];
         let mut enc = rs.encode(&msg).unwrap();
-        for i in 0..17 {
-            enc[i] ^= 0xFF;
+        for byte in enc.iter_mut().take(17) {
+            *byte ^= 0xFF;
         }
         assert!(matches!(
             rs.decode(&enc, msg.len()),

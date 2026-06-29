@@ -4,11 +4,6 @@
 
 //! Systematic Reed-Solomon encoder over GF(2^8).
 
-// Suppress dead_code lint: encode_blocks, encoded_len, and build_generator are
-// pub(crate) but only called from tests until Task 11 wires lib::encode. FCR in
-// lib.rs is also transitively suppressed through this allow.
-#![allow(dead_code)]
-
 use crate::gf256;
 use crate::poly;
 use crate::RsError;

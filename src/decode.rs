@@ -5,9 +5,6 @@
 //! Reed-Solomon decoder pipeline: syndromes → inversionless Berlekamp-Massey
 //! → Chien search → Forney → correct → post-correction syndrome verification.
 
-// Suppress dead_code lint until Task 11 wires the decode pipeline into lib.rs.
-#![allow(dead_code)]
-
 use crate::gf256;
 use crate::poly;
 use crate::RsError;
