@@ -77,4 +77,13 @@ mod tests {
             Err(crate::RsError::InvalidInput(_))
         ));
     }
+
+    #[test]
+    fn framed_rejects_short_input() {
+        let rs = ReedSolomon::default();
+        assert!(matches!(
+            decode_framed(&rs, &[0u8; 4]),
+            Err(crate::RsError::InvalidInput(_))
+        ));
+    }
 }
