@@ -28,6 +28,17 @@ use crate::FCR;
 /// assert_eq!(g.len(), 5);
 /// assert_eq!(g[0], 1); // monic
 /// ```
+/// Encoded length `ceil(len/data_len) * (data_len + parity_len)` with checked
+/// arithmetic; `None` on `usize` overflow. `len == 0` → `Some(0)`.
+pub(crate) fn encoded_len(len: usize, data_len: usize, parity_len: usize) -> Option<usize> {
+    if len == 0 {
+        return Some(0);
+    }
+    let blocks = len.checked_add(data_len - 1)? / data_len; // ceil division
+    let n = data_len.checked_add(parity_len)?;
+    blocks.checked_mul(n)
+}
+
 pub(crate) fn build_generator(parity_len: usize) -> Vec<u8> {
     let mut g = vec![1u8];
     for i in 0..parity_len {
