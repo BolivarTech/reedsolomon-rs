@@ -39,6 +39,9 @@ pub(crate) fn encode_framed(rs: &ReedSolomon, data: &[u8]) -> Result<Vec<u8>, Rs
 
 /// Decode a framed stream; reject header/parameter inconsistencies as `InvalidInput`.
 pub(crate) fn decode_framed(rs: &ReedSolomon, framed: &[u8]) -> Result<Vec<u8>, RsError> {
+    if framed.len() < FRAME_HEADER_LEN {
+        return Err(RsError::InvalidInput("framed shorter than header".into()));
+    }
     let h = &framed[..FRAME_HEADER_LEN];
     if h[3] as usize != rs.parity_len() || h[4] as usize != rs.data_len() {
         return Err(RsError::InvalidInput(
