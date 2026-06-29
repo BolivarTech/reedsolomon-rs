@@ -186,18 +186,88 @@ pub(crate) fn forney(
 
 /// Decode and error-correct one `n`-byte block; return its `data_len` data
 /// bytes. `Uncorrectable` on any inconsistency (the never-mis-correct invariant).
-pub(crate) fn decode_block(_block: &[u8], _parity_len: usize) -> Result<Vec<u8>, RsError> {
-    todo!("decode_block: implemented in Green phase")
+pub(crate) fn decode_block(block: &[u8], parity_len: usize) -> Result<Vec<u8>, RsError> {
+    let n = block.len();
+    let data_len = n - parity_len;
+    let t = parity_len / 2;
+    let synd = syndromes(block, parity_len);
+    if all_zero(&synd) {
+        return Ok(block[..data_len].to_vec());
+    }
+    if t == 0 {
+        return Err(RsError::Uncorrectable("nonzero syndrome, t=0 code".into()));
+    }
+    let lambda = berlekamp_massey(&synd, t);
+    let degree = lambda.len() - 1;
+    if degree == 0 || degree > t {
+        return Err(RsError::Uncorrectable(format!(
+            "lambda degree {degree} > t {t}"
+        )));
+    }
+    let positions = chien_search(&lambda, n);
+    if positions.len() != degree {
+        return Err(RsError::Uncorrectable(
+            "Chien root count != lambda degree (or out-of-range root)".into(),
+        ));
+    }
+    let mags = forney(&synd, &lambda, &positions, n)
+        .ok_or_else(|| RsError::Uncorrectable("zero/degenerate Forney magnitude".into()))?;
+    let mut corrected = block.to_vec();
+    for (k, &p) in positions.iter().enumerate() {
+        corrected[p] = gf256::add(corrected[p], mags[k]);
+    }
+    // post-correction verification — primary defence against mis-correction
+    if !all_zero(&syndromes(&corrected, parity_len)) {
+        return Err(RsError::Uncorrectable(
+            "post-correction syndromes nonzero".into(),
+        ));
+    }
+    Ok(corrected[..data_len].to_vec())
 }
 
 /// Block loop with structural validation and final truncation to `original_len`.
 pub(crate) fn decode_blocks(
-    _encoded: &[u8],
-    _original_len: usize,
-    _data_len: usize,
-    _parity_len: usize,
+    encoded: &[u8],
+    original_len: usize,
+    data_len: usize,
+    parity_len: usize,
 ) -> Result<Vec<u8>, RsError> {
-    todo!("decode_blocks: implemented in Green phase")
+    let n = data_len + parity_len;
+    if encoded.is_empty() {
+        return if original_len == 0 {
+            Ok(Vec::new())
+        } else {
+            Err(RsError::InvalidInput(
+                "empty encoded but original_len > 0".into(),
+            ))
+        };
+    }
+    if !encoded.len().is_multiple_of(n) {
+        return Err(RsError::InvalidInput(format!(
+            "encoded length {} not a multiple of n={n}",
+            encoded.len()
+        )));
+    }
+    let blocks = encoded.len() / n;
+    // B must equal ceil(original_len/data_len) and original_len <= B*data_len
+    let needed = original_len
+        .checked_add(data_len - 1)
+        .map(|x| x / data_len)
+        .unwrap_or(usize::MAX);
+    let cap = blocks.checked_mul(data_len);
+    if needed != blocks || cap.is_none_or(|c| original_len > c) {
+        return Err(RsError::InvalidInput(format!(
+            "original_len {original_len} inconsistent with {blocks} block(s)"
+        )));
+    }
+    let mut out = Vec::new();
+    out.try_reserve(blocks * data_len)
+        .map_err(|_| RsError::InvalidInput("output allocation too large".into()))?;
+    for blk in encoded.chunks(n) {
+        out.extend_from_slice(&decode_block(blk, parity_len)?);
+    }
+    out.truncate(original_len);
+    Ok(out)
 }
 
 #[cfg(test)]
