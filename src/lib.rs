@@ -116,19 +116,24 @@ impl ReedSolomon {
 
     /// Encodes `data` into RS codewords (data chunks + parity).
     ///
-    /// TODO: native GF(2^8) systematic encoder.
-    pub fn encode(&self, _data: &[u8]) -> Result<Vec<u8>, RsError> {
-        todo!("native GF(2^8) RS encoder")
+    /// # Errors
+    /// [`RsError::InvalidInput`] if the encoded length overflows `usize` or the
+    /// output allocation fails.
+    pub fn encode(&self, data: &[u8]) -> Result<Vec<u8>, RsError> {
+        crate::encode::encode_blocks(data, self.data_len, self.parity_len)
     }
 
     /// Decodes + error-corrects `encoded`, returning the original `original_len`
     /// bytes. Must return [`RsError::Uncorrectable`] (never mis-corrected data)
     /// when a block exceeds the correction capacity.
     ///
-    /// TODO: native GF(2^8) decoder (syndromes → inversionless Berlekamp-Massey →
-    /// Chien search → Forney → post-correction syndrome verification).
-    pub fn decode(&self, _encoded: &[u8], _original_len: usize) -> Result<Vec<u8>, RsError> {
-        todo!("native GF(2^8) RS decoder")
+    /// # Errors
+    /// [`RsError::Uncorrectable`] when a block exceeds the correction capacity or
+    /// fails post-correction verification; [`RsError::InvalidInput`] when the
+    /// encoded length is not a whole number of blocks or `original_len` is
+    /// inconsistent with the block geometry.
+    pub fn decode(&self, encoded: &[u8], original_len: usize) -> Result<Vec<u8>, RsError> {
+        crate::decode::decode_blocks(encoded, original_len, self.data_len, self.parity_len)
     }
 }
 
