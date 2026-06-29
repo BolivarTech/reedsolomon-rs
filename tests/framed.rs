@@ -10,9 +10,9 @@
 
 use reedsolomon::ReedSolomon;
 
-#[path = "kat_vectors.rs"]
-mod kat_vectors;
-use kat_vectors::*;
+#[path = "kat_vectors_framed.rs"]
+mod kat_vectors_framed;
+use kat_vectors_framed::{RS255_DATA, RS255_FRAMED};
 
 /// Confirms that `encode_framed` produces the exact byte sequence computed by
 /// the offline `scripts/gen_kat.py` reference (reedsolo, fcr=112, prim=0x187).
