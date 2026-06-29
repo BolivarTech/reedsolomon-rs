@@ -43,4 +43,10 @@ mod tests {
     fn exp_zero_is_one() {
         assert_eq!(EXP[0], 1, "alpha^0 == 1");
     }
+
+    /// `α^1` must equal the primitive element value `ALPHA`.
+    #[test]
+    fn exp_one_is_alpha() {
+        assert_eq!(EXP[1], ALPHA, "alpha^1 == alpha");
+    }
 }
