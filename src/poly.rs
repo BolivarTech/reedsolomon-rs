@@ -48,8 +48,16 @@ pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
 ///
 /// # Parameters
 /// - `a`, `b`: polynomials in big-endian order.
-pub(crate) fn add(_a: &[u8], _b: &[u8]) -> Vec<u8> {
-    todo!("poly::add")
+pub(crate) fn add(a: &[u8], b: &[u8]) -> Vec<u8> {
+    let n = a.len().max(b.len());
+    let mut out = vec![0u8; n];
+    for (i, &c) in a.iter().rev().enumerate() {
+        out[n - 1 - i] = c;
+    }
+    for (i, &c) in b.iter().rev().enumerate() {
+        out[n - 1 - i] = gf256::add(out[n - 1 - i], c);
+    }
+    out
 }
 
 #[cfg(test)]
