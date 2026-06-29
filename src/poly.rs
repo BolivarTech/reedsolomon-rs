@@ -37,8 +37,8 @@ pub(crate) fn eval(p: &[u8], x: u8) -> u8 {
 /// # Parameters
 /// - `p`: input polynomial (big-endian).
 /// - `s`: scalar multiplier.
-pub(crate) fn scale(_p: &[u8], _s: u8) -> Vec<u8> {
-    todo!("poly::scale")
+pub(crate) fn scale(p: &[u8], s: u8) -> Vec<u8> {
+    p.iter().map(|&c| gf256::mul(c, s)).collect()
 }
 
 #[cfg(test)]
