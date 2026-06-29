@@ -33,6 +33,8 @@ const fn build_tables() -> ([u8; 512], [u8; 256]) {
     exp[0] = 1;
     // α^1 = α (the primitive element).
     exp[1] = ALPHA;
+    // α^255 = 1 (multiplicative order of α over GF(2^8) is 255).
+    exp[255] = 1;
     (exp, log)
 }
 
