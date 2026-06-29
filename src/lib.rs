@@ -18,12 +18,13 @@
 //! ## Status: WORK IN PROGRESS (name-reservation scaffold)
 //!
 //! The public API below is the contract; the GF(2^8) implementation is being
-//! written natively to remove any third-party FEC dependency. See
-//! `HANDOFF.md` for the full algorithm specification and the test bar.
+//! written natively to remove any third-party FEC dependency.
 //!
 //! [`cryptovault`]: https://crates.io/crates/cryptovault
 
 #![forbid(unsafe_code)]
+
+pub(crate) mod gf256;
 
 use std::fmt;
 
@@ -106,19 +107,19 @@ impl ReedSolomon {
 
     /// Encodes `data` into RS codewords (data chunks + parity).
     ///
-    /// TODO(handoff): native GF(2^8) systematic encoder — see `HANDOFF.md`.
+    /// TODO: native GF(2^8) systematic encoder.
     pub fn encode(&self, _data: &[u8]) -> Vec<u8> {
-        todo!("native GF(2^8) RS encoder — see HANDOFF.md")
+        todo!("native GF(2^8) RS encoder")
     }
 
     /// Decodes + error-corrects `encoded`, returning the original `original_len`
     /// bytes. Must return [`RsError::Uncorrectable`] (never mis-corrected data)
     /// when a block exceeds the correction capacity.
     ///
-    /// TODO(handoff): native GF(2^8) decoder (syndromes → Berlekamp-Massey →
-    /// Chien search → Forney) — see `HANDOFF.md`.
+    /// TODO: native GF(2^8) decoder (syndromes → inversionless Berlekamp-Massey →
+    /// Chien search → Forney → post-correction syndrome verification).
     pub fn decode(&self, _encoded: &[u8], _original_len: usize) -> Result<Vec<u8>, RsError> {
-        todo!("native GF(2^8) RS decoder — see HANDOFF.md")
+        todo!("native GF(2^8) RS decoder")
     }
 }
 
@@ -147,6 +148,6 @@ mod tests {
         assert_eq!(rs.parity_len, 32);
     }
 
-    // TODO(handoff): round-trip KATs, corrupt-<=16-per-block recovery,
-    // >16-errors-declares-failure (no mis-correction), and fuzzing. See HANDOFF.md.
+    // TODO: round-trip KATs, corrupt-<=16-per-block recovery,
+    // >16-errors-declares-failure (no mis-correction), and fuzzing.
 }
