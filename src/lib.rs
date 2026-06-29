@@ -25,6 +25,7 @@
 #![forbid(unsafe_code)]
 
 pub(crate) mod gf256;
+pub(crate) mod poly;
 
 use std::fmt;
 
