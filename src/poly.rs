@@ -60,6 +60,17 @@ pub(crate) fn add(a: &[u8], b: &[u8]) -> Vec<u8> {
     out
 }
 
+/// Multiply two polynomials over GF(2^8).
+///
+/// Returns a polynomial of degree `deg(a) + deg(b)`, or an empty `Vec` if
+/// either input is empty.
+///
+/// # Parameters
+/// - `a`, `b`: polynomials in big-endian order.
+pub(crate) fn mul(_a: &[u8], _b: &[u8]) -> Vec<u8> {
+    todo!("poly::mul")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -88,5 +99,16 @@ mod tests {
         let b = [1u8, 1, 1]; // x^2 + x + 1
         let result = add(&a, &b);
         assert_eq!(result, vec![1u8, 0, 0]);
+    }
+
+    #[test]
+    fn mul_then_eval_is_pointwise_product() {
+        let a = [1u8, 2]; // x + 2
+        let b = [1u8, 3]; // x + 3
+        let prod = mul(&a, &b);
+        for x in 0u16..256 {
+            let x = x as u8;
+            assert_eq!(eval(&prod, x), crate::gf256::mul(eval(&a, x), eval(&b, x)));
+        }
     }
 }
