@@ -78,6 +78,7 @@ pub(crate) fn mul(a: u8, b: u8) -> u8 {
 /// The codec never calls `inv(0)` — enforced by the caller's zero-guard in
 /// [`mul`] and by the decoder's syndrome/Chien logic.
 pub(crate) fn inv(a: u8) -> u8 {
+    assert!(a != 0, "gf256::inv(0) is undefined");
     EXP[255 - LOG[a as usize] as usize]
 }
 
@@ -87,6 +88,7 @@ pub(crate) fn inv(a: u8) -> u8 {
 /// `inv` call. Returns 0 when `a == 0` (without reading the log table).
 /// Precondition: `b != 0` (0 has no multiplicative inverse).
 pub(crate) fn div(a: u8, b: u8) -> u8 {
+    assert!(b != 0, "gf256::div by zero");
     if a == 0 {
         0
     } else {
