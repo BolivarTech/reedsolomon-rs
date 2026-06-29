@@ -58,7 +58,19 @@ pub(crate) fn encode_blocks(
     if data.is_empty() {
         return Ok(out);
     }
-    todo!("single- and multi-block encoding not yet implemented")
+    if data.len() > data_len {
+        return Err(RsError::InvalidInput(
+            "multi-block encoding not yet implemented".into(),
+        ));
+    }
+    let g = build_generator(parity_len);
+    let mut block = vec![0u8; data_len + parity_len];
+    block[..data.len()].copy_from_slice(data);
+    // remainder of message(x)*x^parity_len mod g(x)
+    let parity = poly::remainder(&block, &g);
+    block[data_len..].copy_from_slice(&parity);
+    out.extend_from_slice(&block);
+    Ok(out)
 }
 
 pub(crate) fn build_generator(parity_len: usize) -> Vec<u8> {
