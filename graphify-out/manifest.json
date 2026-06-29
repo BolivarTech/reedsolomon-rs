@@ -1,0 +1,22 @@
+{
+  ".remember/tmp/last-ndc.ts": {
+    "mtime": 1782688445.3987045,
+    "ast_hash": "4fa90badbcf70dab9b9e30905eb70cf3",
+    "semantic_hash": "4fa90badbcf70dab9b9e30905eb70cf3"
+  },
+  ".remember/tmp/last-save.json": {
+    "mtime": 1782689800.8055255,
+    "ast_hash": "0bd26c99131f70b1c0b9f33fbbaa18ac",
+    "semantic_hash": "0bd26c99131f70b1c0b9f33fbbaa18ac"
+  },
+  "run-tests.py": {
+    "mtime": 1782525935.025405,
+    "ast_hash": "0b7858a4ebeed3a1c5159408eef1d151",
+    "semantic_hash": "0b7858a4ebeed3a1c5159408eef1d151"
+  },
+  "src/lib.rs": {
+    "mtime": 1782684237.4811683,
+    "ast_hash": "58b8ef7a88859abd1d05349a8db7399a",
+    "semantic_hash": "58b8ef7a88859abd1d05349a8db7399a"
+  }
+}
