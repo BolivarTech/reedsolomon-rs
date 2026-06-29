@@ -10,6 +10,7 @@
 
 use crate::gf256;
 use crate::poly;
+use crate::RsError;
 use crate::FCR;
 
 /// Build the code generator `g(x) = Π_{i=FCR}^{FCR+parity_len-1} (x - α^i)`.
@@ -37,6 +38,27 @@ pub(crate) fn encoded_len(len: usize, data_len: usize, parity_len: usize) -> Opt
     let blocks = len.checked_add(data_len - 1)? / data_len; // ceil division
     let n = data_len.checked_add(parity_len)?;
     blocks.checked_mul(n)
+}
+
+/// Systematic encode of `data` into `data_len`+`parity_len`-byte codewords.
+pub(crate) fn encode_blocks(
+    data: &[u8],
+    data_len: usize,
+    parity_len: usize,
+) -> Result<Vec<u8>, RsError> {
+    let total = encoded_len(data.len(), data_len, parity_len).ok_or_else(|| {
+        RsError::InvalidInput(format!(
+            "encoded length overflows usize (len={}, data_len={data_len}, parity_len={parity_len})",
+            data.len()
+        ))
+    })?;
+    let mut out = Vec::new();
+    out.try_reserve(total)
+        .map_err(|_| RsError::InvalidInput("output allocation too large".into()))?;
+    if data.is_empty() {
+        return Ok(out);
+    }
+    todo!("single- and multi-block encoding not yet implemented")
 }
 
 pub(crate) fn build_generator(parity_len: usize) -> Vec<u8> {
