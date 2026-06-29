@@ -40,6 +40,11 @@ pub(crate) fn encode_framed(rs: &ReedSolomon, data: &[u8]) -> Result<Vec<u8>, Rs
 /// Decode a framed stream; reject header/parameter inconsistencies as `InvalidInput`.
 pub(crate) fn decode_framed(rs: &ReedSolomon, framed: &[u8]) -> Result<Vec<u8>, RsError> {
     let h = &framed[..FRAME_HEADER_LEN];
+    if h[3] as usize != rs.parity_len() || h[4] as usize != rs.data_len() {
+        return Err(RsError::InvalidInput(
+            "frame codec parameter mismatch".into(),
+        ));
+    }
     let original_len_u64 = u64::from_be_bytes(h[5..13].try_into().expect("8 bytes"));
     // Reject (never silently truncate) a length that does not fit usize — only
     // possible on 32-bit targets where usize < u64.
