@@ -43,6 +43,10 @@ pub(crate) fn decode_framed(rs: &ReedSolomon, framed: &[u8]) -> Result<Vec<u8>, 
         return Err(RsError::InvalidInput("framed shorter than header".into()));
     }
     let h = &framed[..FRAME_HEADER_LEN];
+    let stored = u32::from_be_bytes([h[13], h[14], h[15], h[16]]);
+    if crc32(&h[..13]) != stored {
+        return Err(RsError::InvalidInput("frame header CRC mismatch".into()));
+    }
     if h[3] as usize != rs.parity_len() || h[4] as usize != rs.data_len() {
         return Err(RsError::InvalidInput(
             "frame codec parameter mismatch".into(),
