@@ -32,6 +32,15 @@ pub(crate) fn eval(p: &[u8], x: u8) -> u8 {
     acc
 }
 
+/// Multiply every coefficient of `p` by the scalar `s` in GF(2^8).
+///
+/// # Parameters
+/// - `p`: input polynomial (big-endian).
+/// - `s`: scalar multiplier.
+pub(crate) fn scale(_p: &[u8], _s: u8) -> Vec<u8> {
+    todo!("poly::scale")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -40,5 +49,15 @@ mod tests {
     fn eval_constant_poly_returns_constant() {
         // A single-coefficient polynomial is a constant: p(x) = 7 for all x.
         assert_eq!(eval(&[7], 99), 7);
+    }
+
+    #[test]
+    fn scale_multiplies_every_coefficient_by_scalar() {
+        // scale([1, 2, 3], 0x02) must equal [mul(1,2), mul(2,2), mul(3,2)].
+        let p = [1u8, 2, 3];
+        let s = 2u8;
+        let result = scale(&p, s);
+        let expected: Vec<u8> = p.iter().map(|&c| crate::gf256::mul(c, s)).collect();
+        assert_eq!(result, expected);
     }
 }
