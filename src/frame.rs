@@ -61,4 +61,15 @@ mod tests {
         assert_eq!(&framed[0..2], &FRAME_MAGIC);
         assert_eq!(decode_framed(&rs, &framed).unwrap(), msg);
     }
+
+    #[test]
+    fn framed_rejects_parameter_mismatch() {
+        let enc_rs = ReedSolomon::default(); // (32, 223)
+        let framed = encode_framed(&enc_rs, b"hello").unwrap();
+        let dec_rs = ReedSolomon::new(16, 239).unwrap(); // subset-roots silent case
+        assert!(matches!(
+            decode_framed(&dec_rs, &framed),
+            Err(crate::RsError::InvalidInput(_))
+        ));
+    }
 }
