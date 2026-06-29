@@ -170,4 +170,15 @@ mod tests {
         let dec = rs.decode(&enc, msg.len()).unwrap();
         assert_eq!(dec, msg);
     }
+
+    #[test]
+    fn default_recovers_16_errors_per_block() {
+        let rs = ReedSolomon::default();
+        let msg = vec![0xABu8; 223];
+        let mut enc = rs.encode(&msg).unwrap();
+        for i in 0..16 {
+            enc[i * 3] ^= 0x5A;
+        } // 16 errors in the single block
+        assert_eq!(rs.decode(&enc, msg.len()).unwrap(), msg);
+    }
 }
