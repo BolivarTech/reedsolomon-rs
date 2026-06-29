@@ -108,4 +108,17 @@ mod tests {
             Err(crate::RsError::InvalidInput(_))
         ));
     }
+
+    #[test]
+    fn framed_rejects_bad_magic() {
+        let rs = ReedSolomon::default();
+        let mut framed = encode_framed(&rs, b"hello").unwrap();
+        framed[0] = 0x00; // corrupt magic, then re-seal the CRC so only the
+        let crc = crate::crc::crc32(&framed[..13]); // magic check can reject it.
+        framed[13..17].copy_from_slice(&crc.to_be_bytes());
+        assert!(matches!(
+            decode_framed(&rs, &framed),
+            Err(crate::RsError::InvalidInput(_))
+        ));
+    }
 }
