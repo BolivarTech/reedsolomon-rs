@@ -10,6 +10,7 @@
 
 use crate::gf256;
 use crate::poly;
+use crate::RsError;
 use crate::FCR;
 
 /// Syndromes `S[s] = R(α^{FCR+s})` for `s in 0..parity_len`.
@@ -183,9 +184,36 @@ pub(crate) fn forney(
     Some(mags)
 }
 
+/// Decode and error-correct one `n`-byte block; return its `data_len` data
+/// bytes. `Uncorrectable` on any inconsistency (the never-mis-correct invariant).
+pub(crate) fn decode_block(_block: &[u8], _parity_len: usize) -> Result<Vec<u8>, RsError> {
+    todo!("decode_block: implemented in Green phase")
+}
+
+/// Block loop with structural validation and final truncation to `original_len`.
+pub(crate) fn decode_blocks(
+    _encoded: &[u8],
+    _original_len: usize,
+    _data_len: usize,
+    _parity_len: usize,
+) -> Result<Vec<u8>, RsError> {
+    todo!("decode_blocks: implemented in Green phase")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn decode_block_recovers_up_to_t_errors() {
+        let data = [1u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        let enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        let mut blk = enc.clone();
+        blk[1] ^= 0x10;
+        blk[7] ^= 0x20; // t=2 errors
+        let recovered = decode_block(&blk, 4).unwrap();
+        assert_eq!(recovered, &data[..]);
+    }
 
     #[test]
     fn clean_codeword_has_zero_syndromes() {
