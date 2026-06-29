@@ -65,6 +65,12 @@ pub(crate) fn encode_blocks(
         // remainder of message(x)*x^parity_len mod g(x): the data sits in the
         // high `data_len` positions, the low `parity_len` are 0 before division.
         let parity = poly::remainder(&block, &g);
+        // poly::remainder returns exactly divisor.len()-1 == parity_len bytes (fixed-range slice, no normalisation).
+        debug_assert_eq!(
+            parity.len(),
+            parity_len,
+            "poly::remainder must return parity_len bytes"
+        );
         block[data_len..].copy_from_slice(&parity);
         out.extend_from_slice(&block);
     }
