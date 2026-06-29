@@ -19,22 +19,31 @@ pub(crate) const ALPHA: u8 = 2;
 /// Number of field elements.
 pub(crate) const FIELD_SIZE: usize = 256;
 
-/// Antilog table: `EXP[i] = α^i`.
+/// Antilog table: `EXP[i] = α^i`. Length 512 so `mul` never needs a modulo
+/// (two logs in `0..=254` sum to `≤ 508`). `EXP[255] = α^0 = 1`.
 pub(crate) const EXP: [u8; 512] = build_tables().0;
-/// Log table: `LOG[α^i] = i`.
+/// Log table: `LOG[α^i] = i`; `LOG[0]` is unused (0 has no log).
 pub(crate) const LOG: [u8; 256] = build_tables().1;
 
-/// Minimal const fn: sets `exp[0] = 1` (α^0 = identity). Other entries
-/// filled to zero pending remaining invariant tests.
 const fn build_tables() -> ([u8; 512], [u8; 256]) {
     let mut exp = [0u8; 512];
-    let log = [0u8; 256];
-    // α^0 = 1: the identity of the multiplicative group.
-    exp[0] = 1;
-    // α^1 = α (the primitive element).
-    exp[1] = ALPHA;
-    // α^255 = 1 (multiplicative order of α over GF(2^8) is 255).
-    exp[255] = 1;
+    let mut log = [0u8; 256];
+    let mut x: u16 = 1;
+    let mut i = 0usize;
+    while i < 255 {
+        exp[i] = x as u8;
+        log[x as usize] = i as u8;
+        x <<= 1;
+        if x & 0x100 != 0 {
+            x ^= FIELD_POLY;
+        }
+        i += 1;
+    }
+    let mut j = 255usize;
+    while j < 512 {
+        exp[j] = exp[j - 255];
+        j += 1;
+    }
     (exp, log)
 }
 
@@ -60,11 +69,20 @@ mod tests {
         assert_eq!(EXP[255], 1, "multiplicative order is 255");
     }
 
+    /// `log(1) == 0` since `α^0 = 1`.
+    #[test]
+    fn log_of_one_is_zero() {
+        assert_eq!(LOG[1], 0, "log(1) == 0");
+    }
+
     /// Round-trip: `EXP[LOG[x]] == x` for every non-zero field element.
     #[test]
     fn exp_log_roundtrip_for_all_nonzero_elements() {
         for x in 1u16..256 {
-            assert_eq!(EXP[LOG[x as usize] as usize], x as u8, "exp(log(x)) == x for x={x}");
+            assert_eq!(
+                EXP[LOG[x as usize] as usize], x as u8,
+                "exp(log(x)) == x for x={x}"
+            );
         }
     }
 }
