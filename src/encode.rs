@@ -4,8 +4,9 @@
 
 //! Systematic Reed-Solomon encoder over GF(2^8).
 
-// Suppress dead_code lint until the systematic encoder (later task) calls
-// build_generator from non-test production code.
+// Suppress dead_code lint: encode_blocks, encoded_len, and build_generator are
+// pub(crate) but only called from tests until Task 11 wires lib::encode. FCR in
+// lib.rs is also transitively suppressed through this allow.
 #![allow(dead_code)]
 
 use crate::gf256;
@@ -13,24 +14,13 @@ use crate::poly;
 use crate::RsError;
 use crate::FCR;
 
-/// Build the code generator `g(x) = Π_{i=FCR}^{FCR+parity_len-1} (x - α^i)`.
-///
-/// Returns a monic, big-endian polynomial of length `parity_len + 1` whose
-/// roots are `α^FCR, α^(FCR+1), …, α^(FCR+parity_len-1)` over GF(2^8).
-///
-/// # Parameters
-/// - `parity_len`: number of parity symbols `2t`; determines the degree of
-///   `g(x)` and the number of correctable errors `t = parity_len / 2`.
-///
-/// # Examples
-/// ```ignore
-/// // For parity_len = 4 the polynomial has degree 4 (5 coefficients).
-/// let g = build_generator(4);
-/// assert_eq!(g.len(), 5);
-/// assert_eq!(g[0], 1); // monic
-/// ```
 /// Encoded length `ceil(len/data_len) * (data_len + parity_len)` with checked
 /// arithmetic; `None` on `usize` overflow. `len == 0` → `Some(0)`.
+///
+/// # Parameters
+/// - `len`: total number of input bytes.
+/// - `data_len`: number of data bytes per block.
+/// - `parity_len`: number of parity bytes per block.
 pub(crate) fn encoded_len(len: usize, data_len: usize, parity_len: usize) -> Option<usize> {
     if len == 0 {
         return Some(0);
@@ -41,6 +31,15 @@ pub(crate) fn encoded_len(len: usize, data_len: usize, parity_len: usize) -> Opt
 }
 
 /// Systematic encode of `data` into `data_len`+`parity_len`-byte codewords.
+///
+/// Each `data_len`-byte chunk is zero-padded then paired with `parity_len` parity
+/// bytes computed as `remainder(message(x)·x^parity_len, g(x))`. The output is
+/// the concatenation of all codewords (data bytes verbatim, then parity bytes).
+/// Empty input produces empty output.
+///
+/// # Errors
+/// [`RsError::InvalidInput`] if the encoded length overflows `usize` or if
+/// the output `Vec` allocation fails.
 pub(crate) fn encode_blocks(
     data: &[u8],
     data_len: usize,
@@ -58,21 +57,36 @@ pub(crate) fn encode_blocks(
     if data.is_empty() {
         return Ok(out);
     }
-    if data.len() > data_len {
-        return Err(RsError::InvalidInput(
-            "multi-block encoding not yet implemented".into(),
-        ));
-    }
     let g = build_generator(parity_len);
-    let mut block = vec![0u8; data_len + parity_len];
-    block[..data.len()].copy_from_slice(data);
-    // remainder of message(x)*x^parity_len mod g(x)
-    let parity = poly::remainder(&block, &g);
-    block[data_len..].copy_from_slice(&parity);
-    out.extend_from_slice(&block);
+    for chunk in data.chunks(data_len) {
+        // zero-pad chunk to data_len (high-degree data, then parity)
+        let mut block = vec![0u8; data_len + parity_len];
+        block[..chunk.len()].copy_from_slice(chunk);
+        // remainder of message(x)*x^parity_len mod g(x): the data sits in the
+        // high `data_len` positions, the low `parity_len` are 0 before division.
+        let parity = poly::remainder(&block, &g);
+        block[data_len..].copy_from_slice(&parity);
+        out.extend_from_slice(&block);
+    }
     Ok(out)
 }
 
+/// Build the code generator `g(x) = Π_{i=FCR}^{FCR+parity_len-1} (x - α^i)`.
+///
+/// Returns a monic, big-endian polynomial of length `parity_len + 1` whose
+/// roots are `α^FCR, α^(FCR+1), …, α^(FCR+parity_len-1)` over GF(2^8).
+///
+/// # Parameters
+/// - `parity_len`: number of parity symbols `2t`; determines the degree of
+///   `g(x)` and the number of correctable errors `t = parity_len / 2`.
+///
+/// # Examples
+/// ```ignore
+/// // For parity_len = 4 the polynomial has degree 4 (5 coefficients).
+/// let g = build_generator(4);
+/// assert_eq!(g.len(), 5);
+/// assert_eq!(g[0], 1); // monic
+/// ```
 pub(crate) fn build_generator(parity_len: usize) -> Vec<u8> {
     let mut g = vec![1u8];
     for i in 0..parity_len {
