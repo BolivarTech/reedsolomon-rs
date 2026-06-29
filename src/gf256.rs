@@ -51,4 +51,10 @@ mod tests {
     fn exp_one_is_alpha() {
         assert_eq!(EXP[1], ALPHA, "alpha^1 == alpha");
     }
+
+    /// Multiplicative order of `α` over GF(2^8) is 255: `α^255 = α^0 = 1`.
+    #[test]
+    fn multiplicative_order_is_255() {
+        assert_eq!(EXP[255], 1, "multiplicative order is 255");
+    }
 }
