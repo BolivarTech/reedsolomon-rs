@@ -46,6 +46,9 @@ pub(crate) fn decode_framed(rs: &ReedSolomon, framed: &[u8]) -> Result<Vec<u8>, 
     if h[0..2] != FRAME_MAGIC {
         return Err(RsError::InvalidInput("bad frame magic".into()));
     }
+    if h[2] != FRAME_VERSION {
+        return Err(RsError::InvalidInput("unsupported frame version".into()));
+    }
     let stored = u32::from_be_bytes([h[13], h[14], h[15], h[16]]);
     if crc32(&h[..13]) != stored {
         return Err(RsError::InvalidInput("frame header CRC mismatch".into()));
