@@ -286,6 +286,28 @@ mod tests {
     }
 
     #[test]
+    fn decode_block_fails_loud_beyond_t() {
+        let data = [1u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        let enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        let mut blk = enc.clone();
+        blk[0] ^= 1;
+        blk[1] ^= 1;
+        blk[2] ^= 1; // t+1=3 errors
+        assert!(matches!(
+            decode_block(&blk, 4),
+            Err(RsError::Uncorrectable(_))
+        ));
+    }
+
+    #[test]
+    fn decode_blocks_rejects_bad_length() {
+        assert!(matches!(
+            decode_blocks(&[0u8; 14], 11, 11, 4), // 14 not multiple of 15
+            Err(RsError::InvalidInput(_))
+        ));
+    }
+
+    #[test]
     fn clean_codeword_has_zero_syndromes() {
         let data = [9u8, 8, 7, 6, 5, 4, 3, 2, 1, 0, 11];
         let enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
