@@ -31,6 +31,8 @@ const fn build_tables() -> ([u8; 512], [u8; 256]) {
     let log = [0u8; 256];
     // α^0 = 1: the identity of the multiplicative group.
     exp[0] = 1;
+    // α^1 = α (the primitive element).
+    exp[1] = ALPHA;
     (exp, log)
 }
 
