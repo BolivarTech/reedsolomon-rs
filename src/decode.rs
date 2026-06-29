@@ -102,6 +102,87 @@ pub(crate) fn chien_search(lambda: &[u8], n: usize) -> Vec<usize> {
     positions
 }
 
+/// Error-evaluator and Forney magnitudes. Returns one magnitude per position
+/// (in the given order), or `None` if any magnitude is zero (degenerate
+/// solution → caller declares `Uncorrectable`).
+///
+/// For each error location `j` with locator value `X = α^{n-1-j}`, the Forney
+/// algorithm computes the magnitude
+/// `e = X^{1-FCR} · Ω(X^{-1}) / Λ'(X^{-1})`, where:
+/// - `Ω(x) = [S(x)·Λ(x)] mod x^{2t}` is the error-evaluator polynomial;
+/// - `Λ'(x)` is the formal derivative of Λ (only odd-degree terms survive in
+///   characteristic 2);
+/// - the `X^{1-FCR}` factor (with **FCR = 112**) is **mandatory** — omitting it
+///   (the implicit `FCR = 1` assumption) yields wrong magnitudes.
+///
+/// `lambda` is big-endian (Task 7) and `positions` come from Chien search
+/// (Task 8). To keep a single endianness convention, `Ω` and `Λ'` are built
+/// low-endian (index = degree), then reversed to big-endian so every evaluation
+/// goes through [`poly::eval`].
+pub(crate) fn forney(
+    synd: &[u8],
+    lambda: &[u8], // big-endian
+    positions: &[usize],
+    n: usize,
+) -> Option<Vec<u8>> {
+    let two_t = synd.len();
+    // Convolve low-endian (index = degree), then convert to big-endian so ALL
+    // evaluations go through poly::eval (single endianness convention).
+    let lambda_le: Vec<u8> = {
+        let mut v = lambda.to_vec();
+        v.reverse();
+        v
+    };
+    // Ω(x) = (S(x)·Λ(x)) mod x^{2t}, low-endian: omega_le[i] = Σ_{j<=i} S_{i-j}·Λ_j
+    let mut omega_le = vec![0u8; two_t];
+    for i in 0..two_t {
+        let mut acc = 0u8;
+        for j in 0..=i {
+            if j < lambda_le.len() {
+                acc = gf256::add(acc, gf256::mul(synd[i - j], lambda_le[j]));
+            }
+        }
+        omega_le[i] = acc;
+    }
+    // Λ'(x): formal derivative — odd-degree terms survive in char 2 (low-endian).
+    let mut lp_le = vec![0u8; lambda_le.len().saturating_sub(1)];
+    for d in 1..lambda_le.len() {
+        if d % 2 == 1 {
+            lp_le[d - 1] = lambda_le[d];
+        }
+    }
+    // to big-endian for poly::eval
+    let omega_be: Vec<u8> = {
+        let mut v = omega_le;
+        v.reverse();
+        v
+    };
+    let lp_be: Vec<u8> = {
+        let mut v = lp_le;
+        v.reverse();
+        v
+    };
+    let mut mags = Vec::with_capacity(positions.len());
+    for &j in positions {
+        let exp = (n - 1 - j) % 255; // X = α^exp
+        let x = gf256::pow(gf256::ALPHA, exp);
+        let x_inv = gf256::inv(x);
+        let num = poly::eval(&omega_be, x_inv);
+        let den = poly::eval(&lp_be, x_inv);
+        if den == 0 {
+            return None;
+        }
+        // Forney magnitude with FCR factor: e = X^{1-FCR} · Ω(X^{-1}) / Λ'(X^{-1})
+        let factor = gf256::mul(x, gf256::pow(x_inv, FCR)); // X^{1} · X^{-FCR}
+        let mag = gf256::mul(factor, gf256::div(num, den));
+        if mag == 0 {
+            return None;
+        }
+        mags.push(mag);
+    }
+    Some(mags)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
