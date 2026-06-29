@@ -46,4 +46,9 @@ mod tests {
     fn crc32_ieee_check_value() {
         assert_eq!(crc32(b"123456789"), 0xCBF4_3926);
     }
+
+    #[test]
+    fn crc32_empty_returns_zero() {
+        assert_eq!(crc32(b""), 0);
+    }
 }
