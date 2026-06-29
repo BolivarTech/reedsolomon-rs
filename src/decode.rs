@@ -85,6 +85,12 @@ pub(crate) fn berlekamp_massey(synd: &[u8], _t: usize) -> Vec<u8> {
     be
 }
 
+/// Chien search stub (Red phase: no real logic yet).
+pub(crate) fn chien_search(lambda: &[u8], n: usize) -> Vec<usize> {
+    let _ = (lambda, n);
+    Vec::new()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -116,5 +122,20 @@ mod tests {
         let lambda = berlekamp_massey(&s, 2);
         let degree = lambda.len() - 1 - lambda.iter().take_while(|&&c| c == 0).count();
         assert_eq!(degree, 1, "exactly one error");
+    }
+
+    #[test]
+    fn chien_finds_the_injected_position() {
+        let data = [1u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        let pos = 6usize;
+        enc[pos] ^= 0x77;
+        let s = syndromes(&enc, 4);
+        let lambda = berlekamp_massey(&s, 2);
+        let roots = chien_search(&lambda, enc.len());
+        assert!(
+            roots.contains(&pos),
+            "Chien locates the error byte position"
+        );
     }
 }
