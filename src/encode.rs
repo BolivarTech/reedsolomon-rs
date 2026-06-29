@@ -113,6 +113,13 @@ mod tests {
     }
 
     #[test]
+    fn encode_multiblock_length() {
+        let data = vec![7u8; 25]; // data_len=11 => ceil(25/11)=3 blocks
+        let out = encode_blocks(&data, 11, 4).unwrap();
+        assert_eq!(out.len(), 3 * 15);
+    }
+
+    #[test]
     fn encode_rejects_length_overflow() {
         // data_len=1, parity_len=254 => n=255; a len near usize::MAX overflows B*n.
         // Use a fake huge len via a zero-length slice is impossible; assert the
