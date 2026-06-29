@@ -181,4 +181,18 @@ mod tests {
         } // 16 errors in the single block
         assert_eq!(rs.decode(&enc, msg.len()).unwrap(), msg);
     }
+
+    #[test]
+    fn default_fails_loud_on_17_errors() {
+        let rs = ReedSolomon::default();
+        let msg = vec![0x11u8; 223];
+        let mut enc = rs.encode(&msg).unwrap();
+        for i in 0..17 {
+            enc[i] ^= 0xFF;
+        }
+        assert!(matches!(
+            rs.decode(&enc, msg.len()),
+            Err(RsError::Uncorrectable(_))
+        ));
+    }
 }
