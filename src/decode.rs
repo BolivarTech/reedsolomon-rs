@@ -149,4 +149,24 @@ mod tests {
             "Chien locates the error byte position"
         );
     }
+
+    #[test]
+    fn forney_corrects_a_single_known_error() {
+        let data = [5u8, 4, 3, 2, 1, 9, 8, 7, 6, 0, 1];
+        let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        let clean = enc.clone();
+        let pos = 9usize;
+        enc[pos] ^= 0xC4;
+        let s = syndromes(&enc, 4);
+        let lambda = berlekamp_massey(&s, 2);
+        let positions = chien_search(&lambda, enc.len());
+        let mags = forney(&s, &lambda, &positions, enc.len()).unwrap();
+        for (k, &p) in positions.iter().enumerate() {
+            enc[p] = crate::gf256::add(enc[p], mags[k]);
+        }
+        assert_eq!(
+            enc, clean,
+            "applying Forney magnitudes restores the codeword"
+        );
+    }
 }
