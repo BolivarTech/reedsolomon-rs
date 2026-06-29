@@ -8,8 +8,10 @@
 //! (`x^8 + x^7 + x^2 + x + 1`) and primitive element `α = 0x02`. All multiply,
 //! divide and inverse operations use compile-time `const` log/antilog tables.
 //!
-//! All items are `pub(crate)`; they appear unused to the lib target while only
-//! referenced from tests, hence the module-level suppression below.
+//! All items are `pub(crate)` and consumed by the codec modules (`poly`,
+//! `encode`, `decode`) that are added in subsequent tasks.
+// Suppress dead_code lint until the poly/encode/decode modules (later tasks)
+// reference these functions from non-test code.
 #![allow(dead_code)]
 
 /// CCSDS field-generator polynomial `x^8 + x^7 + x^2 + x + 1` (9-bit, `0x187`).
@@ -45,6 +47,71 @@ const fn build_tables() -> ([u8; 512], [u8; 256]) {
         j += 1;
     }
     (exp, log)
+}
+
+/// Field addition (and subtraction) — XOR in characteristic 2.
+///
+/// # Examples
+/// ```ignore
+/// assert_eq!(add(0x53, 0xca), 0x99);
+/// ```
+pub(crate) fn add(a: u8, b: u8) -> u8 {
+    a ^ b
+}
+
+/// Field multiplication via log/antilog tables.
+///
+/// Returns 0 whenever either operand is 0 (0 has no logarithm, handled
+/// explicitly). Otherwise uses `EXP[LOG[a] + LOG[b]]` with the doubled-length
+/// `EXP` table to avoid a modulo operation.
+pub(crate) fn mul(a: u8, b: u8) -> u8 {
+    if a == 0 || b == 0 {
+        0
+    } else {
+        EXP[LOG[a as usize] as usize + LOG[b as usize] as usize]
+    }
+}
+
+/// Multiplicative inverse via antilog table: `α^(255 - log(a))`.
+///
+/// Precondition: `a != 0` (0 has no multiplicative inverse in GF(2^8)).
+/// The codec never calls `inv(0)` — enforced by the caller's zero-guard in
+/// [`mul`] and by the decoder's syndrome/Chien logic.
+pub(crate) fn inv(a: u8) -> u8 {
+    EXP[255 - LOG[a as usize] as usize]
+}
+
+/// Field division: `a / b = a * inv(b)` in GF(2^8).
+///
+/// Computed via `EXP[(log(a) + 255 - log(b)) % 255]` to avoid a separate
+/// `inv` call. Returns 0 when `a == 0` (without reading the log table).
+/// Precondition: `b != 0` (0 has no multiplicative inverse).
+pub(crate) fn div(a: u8, b: u8) -> u8 {
+    if a == 0 {
+        0
+    } else {
+        EXP[(LOG[a as usize] as usize + 255 - LOG[b as usize] as usize) % 255]
+    }
+}
+
+/// `base` raised to `exp` in GF(2^8).
+///
+/// Conventions: `pow(_, 0) == 1` (including `pow(0, 0)`), `pow(0, e > 0) == 0`.
+/// Computed via `EXP[(log(base) * exp) % 255]` for non-zero bases, which
+/// correctly wraps the exponent around the multiplicative group order (255).
+///
+/// # Examples
+/// ```ignore
+/// assert_eq!(pow(ALPHA, 255), 1); // multiplicative order of α is 255
+/// ```
+pub(crate) fn pow(base: u8, exp: usize) -> u8 {
+    if exp == 0 {
+        1
+    } else if base == 0 {
+        0
+    } else {
+        EXP[(LOG[base as usize] as usize * exp) % 255]
+    }
 }
 
 #[cfg(test)]
@@ -84,6 +151,15 @@ mod tests {
                 "exp(log(x)) == x for x={x}"
             );
         }
+    }
+
+    /// GF(2^8) addition is XOR (characteristic-2 field): `add(a, b) == a ^ b`.
+    #[test]
+    fn add_is_xor() {
+        assert_eq!(add(0x53, 0xca), 0x53 ^ 0xca);
+        assert_eq!(add(0, 0), 0);
+        assert_eq!(add(255, 255), 0);
+        assert_eq!(add(1, 0), 1);
     }
 
     /// Multiplying any element by zero must yield zero (zero is the absorbing
@@ -137,7 +213,11 @@ mod tests {
     #[test]
     fn inv_times_element_is_one() {
         for a in 1u16..256 {
-            assert_eq!(mul(a as u8, inv(a as u8)), 1, "x * inv(x) == 1 failed for x={a}");
+            assert_eq!(
+                mul(a as u8, inv(a as u8)),
+                1,
+                "x * inv(x) == 1 failed for x={a}"
+            );
         }
     }
 
