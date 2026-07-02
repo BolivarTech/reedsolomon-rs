@@ -31,6 +31,40 @@
 //! [`ReedSolomon::encode`] / [`ReedSolomon::decode`] path is unchanged and
 //! carries zero overhead.
 //!
+//! ## Usage
+//!
+//! Raw path — zero overhead; the caller tracks `(parity_len, data_len)` and the
+//! original length:
+//!
+//! ```
+//! use reedsolomon::ReedSolomon;
+//!
+//! let rs = ReedSolomon::default();
+//! let data: &[u8] = b"hello reed-solomon";
+//! let encoded = rs.encode(data)?;
+//! let decoded = rs.decode(&encoded, data.len())?;
+//! assert_eq!(decoded.as_slice(), data);
+//! # Ok::<(), reedsolomon::RsError>(())
+//! ```
+//!
+//! Framed path — self-describing; the header carries the parameters and length,
+//! so no external tracking is needed:
+//!
+//! ```
+//! use reedsolomon::ReedSolomon;
+//!
+//! let rs = ReedSolomon::default();
+//! let data: &[u8] = b"hello reed-solomon";
+//! let framed = rs.encode_framed(data)?;
+//! let decoded = rs.decode_framed(&framed)?;
+//! assert_eq!(decoded.as_slice(), data);
+//! # Ok::<(), reedsolomon::RsError>(())
+//! ```
+//!
+//! Allocation is linear in input size and grown via `try_reserve`; an
+//! unsatisfiable allocation returns [`RsError::InvalidInput`] instead of
+//! aborting the process (memory-exhaustion DoS hardening).
+//!
 //! [`cryptovault`]: https://crates.io/crates/cryptovault
 
 #![forbid(unsafe_code)]
@@ -135,15 +169,50 @@ impl ReedSolomon {
         crate::encode::encode_blocks(data, self.data_len, self.parity_len)
     }
 
-    /// Decodes + error-corrects `encoded`, returning the original `original_len`
-    /// bytes. Must return [`RsError::Uncorrectable`] (never mis-corrected data)
-    /// when a block exceeds the correction capacity.
+    /// Decodes and error-corrects `encoded`, returning the first `original_len`
+    /// original bytes (final-chunk zero padding stripped).
+    ///
+    /// Each `n = data_len + parity_len` block is decoded independently:
+    /// syndromes → inversionless Berlekamp-Massey → Chien search → Forney →
+    /// correction → **mandatory post-correction syndrome verification**. A block
+    /// is accepted only if the result is a valid codeword within the correction
+    /// capacity `t = parity_len / 2`; otherwise the decoder returns
+    /// [`RsError::Uncorrectable`] and **never** wrong-but-plausible data.
+    ///
+    /// # Caller responsibilities (raw path)
+    ///
+    /// The raw stream is **not** self-describing. Two values must match the
+    /// encode side; the framed methods ([`Self::encode_framed`] /
+    /// [`Self::decode_framed`]) embed them in a header and remove both burdens.
+    ///
+    /// * **Matching `(parity_len, data_len)`.** Most mismatches fail loud (a
+    ///   different `n` gives a wrong block split → [`RsError::InvalidInput`]; a
+    ///   larger decode parity set evaluates roots the codeword does not annul →
+    ///   [`RsError::Uncorrectable`]). **One family is silent:** the same `n`, the
+    ///   same FCR, and `parity_decode <= parity_encode`. Then the decode syndrome
+    ///   roots are a *subset* of the encode roots, so every syndrome is genuinely
+    ///   zero, the fast path reports "no error", and `data_len` bytes are
+    ///   returned with some parity bytes silently surfacing as data.
+    ///   Post-correction verification **cannot** catch this — the received word
+    ///   *is* a valid codeword of the smaller code.
+    ///
+    ///   *Worked example:* encode with `RS(255, 223)` (parity 32) and decode with
+    ///   `RS(255, 239)` (parity 16) → 16 of the 32 parity bytes are silently
+    ///   returned as data. Use identical parameters on both sides, or the framed
+    ///   API, to eliminate this footgun.
+    ///
+    /// * **Correct `original_len`.** Zero padding is indistinguishable from data,
+    ///   so the true length cannot be recovered from the stream. For a given
+    ///   encoded stream (block count `B`), any `original_len` in
+    ///   `((B-1)·data_len, B·data_len]` passes validation; an in-range but
+    ///   incorrect value yields a wrong truncation, **not** an error.
     ///
     /// # Errors
     /// [`RsError::Uncorrectable`] when a block exceeds the correction capacity or
-    /// fails post-correction verification; [`RsError::InvalidInput`] when the
-    /// encoded length is not a whole number of blocks or `original_len` is
-    /// inconsistent with the block geometry.
+    /// fails post-correction verification; [`RsError::InvalidInput`] when
+    /// `encoded.len()` is not a whole number of `n`-byte blocks, `original_len`
+    /// is inconsistent with the block geometry, or length arithmetic would
+    /// overflow.
     pub fn decode(&self, encoded: &[u8], original_len: usize) -> Result<Vec<u8>, RsError> {
         crate::decode::decode_blocks(encoded, original_len, self.data_len, self.parity_len)
     }
@@ -172,8 +241,17 @@ impl ReedSolomon {
     }
 
     /// Decode a framed stream produced by [`Self::encode_framed`]. The embedded
-    /// header removes the parameter-match and `original_len` footguns of the raw
-    /// [`Self::decode`] path.
+    /// CRC-checked header removes the parameter-match and `original_len` footguns
+    /// of the raw [`Self::decode`] path: a code-parameter mismatch or a corrupted
+    /// header is rejected as [`RsError::InvalidInput`], never silently mis-decoded.
+    ///
+    /// # Limitations (v0.1.0)
+    /// The 17-byte header is CRC-**checked** but not FEC-**corrected**, so a
+    /// single bit-flip anywhere in the header makes the whole frame fail with
+    /// [`RsError::InvalidInput`] — the payload itself remains FEC-protected. An
+    /// embedded `original_len` that does not fit the platform `usize` (only
+    /// possible on 32-bit targets) is rejected, never silently truncated. A
+    /// FEC-protected header is a possible future hardening.
     ///
     /// # Errors
     /// [`RsError::InvalidInput`] on a short / bad-magic / bad-version / CRC-fail
