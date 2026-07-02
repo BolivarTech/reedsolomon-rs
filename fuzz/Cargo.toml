@@ -1,0 +1,49 @@
+# Author: Julian Bolivar
+# Version: 0.0.1
+# Date: 2026-07-01
+#
+# cargo-fuzz harness for the `reedsolomon` crate. This is a standalone package
+# (its own `[workspace]`) so it is never pulled into the library build or the
+# `cargo nextest` / `cargo clippy` gates of the parent crate. Requires a nightly
+# toolchain and `cargo install cargo-fuzz`; run on a libFuzzer-capable host
+# (Linux/macOS) via `cargo fuzz run <target>`.
+
+[package]
+name = "reedsolomon-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+authors = ["Julian Bolivar <jbolivarg@gmail.com>"]
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.reedsolomon]
+path = ".."
+
+[[bin]]
+name = "decode_target"
+path = "fuzz_targets/decode_target.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "encode_target"
+path = "fuzz_targets/encode_target.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "framed_target"
+path = "fuzz_targets/framed_target.rs"
+test = false
+doc = false
+bench = false
+
+# Standalone workspace: keeps the fuzz crate out of the parent build graph.
+[workspace]
