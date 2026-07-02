@@ -4,8 +4,10 @@ Pure-Rust, **no-`unsafe`** Reed-Solomon forward error correction (FEC) over
 GF(2^8). Default code: **RS(255, 223)** (CCSDS) — 223 data + 32 parity bytes
 per 255-byte codeword, correcting up to **16 corrupted bytes per block**.
 
-> **Status: work in progress.** This is a name-reservation scaffold; the public
-> API is stable, the native GF(2^8) implementation is in progress.
+> **Status: v0.1.0.** Native pure-Rust GF(2^8) codec — systematic encoder and a
+> syndromes → inversionless Berlekamp-Massey → Chien → Forney decoder with
+> mandatory post-correction verification. KAT-pinned against an independent
+> reference; property-tested and fuzzed. No third-party FEC dependency.
 
 ## Why a dedicated crate
 
@@ -22,7 +24,7 @@ wrong-but-plausible data on an over-capacity block is the one outcome this crate
 must never produce silently. (In `cryptovault` the AES-GCM-SIV tag is a final
 backstop, but this crate must be correct on its own.)
 
-## Example (target API)
+## Example
 
 ```rust
 use reedsolomon::ReedSolomon;
