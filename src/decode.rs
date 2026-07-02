@@ -349,6 +349,52 @@ mod tests {
     }
 
     #[test]
+    fn forney_returns_none_on_zero_magnitude() {
+        // A genuine degree-1 locator from a single error, re-evaluated against
+        // all-zero syndromes, makes Ω(X^{-1}) = 0, so every Forney magnitude is
+        // zero. `forney` must report this degenerate solution as `None` (so
+        // `decode_block` declares `Uncorrectable`) rather than apply a bogus
+        // zero-magnitude "correction".
+        let data = [1u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
+        enc[4] ^= 0x2B;
+        let synd = syndromes(&enc, 4);
+        let lambda = berlekamp_massey(&synd, 2);
+        let positions = chien_search(&lambda, enc.len());
+        // Real syndromes → a real nonzero magnitude is returned.
+        assert!(forney(&synd, &lambda, &positions, enc.len()).is_some());
+        // Zeroed syndromes → Ω == 0 → zero magnitude → None (branch under test).
+        let zero = vec![0u8; synd.len()];
+        assert!(forney(&zero, &lambda, &positions, enc.len()).is_none());
+    }
+
+    #[test]
+    fn decode_block_rejects_chien_count_mismatch_in_shortened_code() {
+        // Shortened RS(15,11,4): this >t corruption yields a locator whose Chien
+        // root count disagrees with deg(Λ) — an out-of-range / "phantom" root
+        // dropped by the `[0, n)` bound. It must be rejected, never mis-corrected.
+        let block = [1u8, 2, 3, 21, 5, 71, 7, 8, 9, 10, 198, 139, 194, 87, 101];
+        assert!(matches!(
+            decode_block(&block, 4),
+            Err(RsError::Uncorrectable(_))
+        ));
+    }
+
+    #[test]
+    fn decode_block_rejects_inconsistent_post_correction_syndromes() {
+        // Shortened RS(15,11,4): this >t corruption passes the degree, Chien-count
+        // and Forney checks, but the "corrected" word is not a valid codeword —
+        // the mandatory post-correction syndrome recheck (the primary defence
+        // against mis-correction) rejects it. Removing that recheck would make
+        // this test return `Ok` with wrong-but-plausible data.
+        let block = [1u8, 2, 92, 4, 5, 175, 252, 8, 9, 10, 11, 139, 83, 84, 101];
+        assert!(matches!(
+            decode_block(&block, 4),
+            Err(RsError::Uncorrectable(_))
+        ));
+    }
+
+    #[test]
     fn forney_corrects_a_single_known_error() {
         let data = [5u8, 4, 3, 2, 1, 9, 8, 7, 6, 0, 1];
         let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
