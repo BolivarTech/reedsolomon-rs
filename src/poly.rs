@@ -59,9 +59,12 @@ pub(crate) fn mul(a: &[u8], b: &[u8]) -> Vec<u8> {
 /// - `divisor`: monic divisor polynomial (big-endian).
 ///
 /// # Panics
-/// Debug-asserts that `divisor[0] == 1`.
+/// Panics if `divisor` is not monic (`divisor[0] != 1`). This is an internal
+/// precondition — the generator polynomial is monic by construction — so it is
+/// enforced in all builds (release included) as a defense-in-depth guard, never
+/// reachable from caller input.
 pub(crate) fn remainder(dividend: &[u8], divisor: &[u8]) -> Vec<u8> {
-    debug_assert!(divisor.first() == Some(&1), "divisor must be monic");
+    assert!(divisor.first() == Some(&1), "divisor must be monic");
     let mut work = dividend.to_vec();
     let dl = divisor.len();
     for i in 0..work.len().saturating_sub(dl - 1) {
