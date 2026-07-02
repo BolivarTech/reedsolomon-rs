@@ -1,15 +1,6 @@
 {
   "communities": {
     "0": [
-      "berlekamp_massey",
-      "chien_search",
-      "decode_method",
-      "encode_method",
-      "forney_algorithm",
-      "reed_solomon_struct",
-      "rs_error_enum"
-    ],
-    "1": [
       "display",
       "error",
       "formatter",
@@ -18,7 +9,7 @@
       "src_lib_rserror",
       "src_lib_rserror_fmt"
     ],
-    "2": [
+    "1": [
       "self",
       "src_lib",
       "src_lib_default_is_rs_255_223",
@@ -26,46 +17,26 @@
       "src_lib_new_rejects_zero_lengths",
       "src_lib_reedsolomon_default"
     ],
-    "3": [
+    "2": [
       "default",
       "src_lib_reedsolomon",
       "src_lib_reedsolomon_decode",
       "src_lib_reedsolomon_encode",
       "vec"
     ],
-    "4": [
-      "cryptovault_crate",
-      "reedsolomon_crate"
-    ],
-    "5": [
-      "handoff_md",
-      "readme_md"
-    ],
-    "6": [
-      "run_tests",
-      "run_tests_main"
-    ],
-    "7": [
-      "gf2_8"
-    ],
-    "8": [
-      "rs_255_223"
-    ],
-    "9": [
-      "tmp_last_ndc"
+    "3": [
+      "readme_cryptovault",
+      "readme_decode",
+      "readme_encode",
+      "readme_reedsolomon",
+      "readme_rs_255_223"
     ]
   },
   "cohesion": {
-    "0": 0.2857142857142857,
+    "0": 0.3333333333333333,
     "1": 0.3333333333333333,
-    "2": 0.3333333333333333,
-    "3": 0.5,
-    "4": 1.0,
-    "5": 1.0,
-    "6": 1.0,
-    "7": 1.0,
-    "8": 1.0,
-    "9": 1.0
+    "2": 0.5,
+    "3": 0.4
   },
   "gods": [
     {
@@ -79,14 +50,9 @@
       "degree": 6
     },
     {
-      "id": "decode_method",
-      "label": "decode method",
+      "id": "readme_reedsolomon",
+      "label": "reedsolomon crate",
       "degree": 4
-    },
-    {
-      "id": "reed_solomon_struct",
-      "label": "ReedSolomon struct",
-      "degree": 3
     },
     {
       "id": "src_lib_default_is_rs_255_223",
@@ -94,34 +60,29 @@
       "degree": 2
     },
     {
-      "id": "reedsolomon_crate",
-      "label": "reedsolomon crate",
+      "id": "readme_rs_255_223",
+      "label": "RS(255, 223) code configuration",
       "degree": 1
     },
     {
-      "id": "cryptovault_crate",
+      "id": "readme_cryptovault",
       "label": "cryptovault crate",
       "degree": 1
     },
     {
-      "id": "encode_method",
+      "id": "readme_encode",
       "label": "encode method",
       "degree": 1
     },
     {
-      "id": "rs_error_enum",
-      "label": "RsError enum",
-      "degree": 1
-    },
-    {
-      "id": "berlekamp_massey",
-      "label": "Berlekamp-Massey algorithm",
+      "id": "readme_decode",
+      "label": "decode method",
       "degree": 1
     }
   ],
   "surprises": [],
   "tokens": {
-    "input": 2565,
-    "output": 1853
+    "input": 1145,
+    "output": 950
   }
 }

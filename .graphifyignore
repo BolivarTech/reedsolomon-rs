@@ -1,0 +1,24 @@
+# Graphify corpus exclusions — keep the graph focused on the actual crate
+# (source, README, Cargo manifest, project spec), not agent/process meta-docs.
+
+# Agent / developer memory and local instructions (large, not codebase content)
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# SBTDD process artifacts
+planning/
+sbtdd/
+
+# Remember plugin scratch / history (not crate content)
+.remember/
+
+# Dev tooling, not crate source
+run-tests.py
+scripts/
+
+# Graphify's own output (also auto-excluded)
+graphify-out/
+
+# Build artifacts
+target/
