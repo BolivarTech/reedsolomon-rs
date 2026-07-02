@@ -77,7 +77,7 @@
 pub(crate) mod crc;
 pub(crate) mod decode;
 pub(crate) mod encode;
-mod frame;
+pub(crate) mod frame;
 pub(crate) mod gf256;
 pub(crate) mod poly;
 
