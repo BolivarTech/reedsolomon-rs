@@ -31,7 +31,7 @@ pub(crate) fn all_zero(s: &[u8]) -> bool {
 /// `add`/`mul`): `Λ*(x) = γ·Λ(x) − δ·x·B(x)`; on a length change
 /// `B←Λ, L←r+1−L, γ←δ`, otherwise `B←x·B`. Internally low-endian (index =
 /// degree), converted to big-endian at the end. KAT-pinned (Task 12).
-pub(crate) fn berlekamp_massey(synd: &[u8], _t: usize) -> Vec<u8> {
+pub(crate) fn berlekamp_massey(synd: &[u8]) -> Vec<u8> {
     // Low-endian (index = degree). Inversionless: replace `d/b` by carrying the
     // last discrepancy `gamma` and scaling Λ by it. Shift is the EXPLICIT `x^m`.
     let n = synd.len();
@@ -194,7 +194,7 @@ pub(crate) fn decode_block(block: &[u8], parity_len: usize) -> Result<Vec<u8>, R
     if t == 0 {
         return Err(RsError::Uncorrectable("nonzero syndrome, t=0 code".into()));
     }
-    let lambda = berlekamp_massey(&synd, t);
+    let lambda = berlekamp_massey(&synd);
     let degree = lambda.len() - 1;
     if degree == 0 || degree > t {
         return Err(RsError::Uncorrectable(format!(
@@ -328,7 +328,7 @@ mod tests {
         let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
         enc[2] ^= 0x33;
         let s = syndromes(&enc, 4);
-        let lambda = berlekamp_massey(&s, 2);
+        let lambda = berlekamp_massey(&s);
         let degree = lambda.len() - 1 - lambda.iter().take_while(|&&c| c == 0).count();
         assert_eq!(degree, 1, "exactly one error");
     }
@@ -340,7 +340,7 @@ mod tests {
         let pos = 6usize;
         enc[pos] ^= 0x77;
         let s = syndromes(&enc, 4);
-        let lambda = berlekamp_massey(&s, 2);
+        let lambda = berlekamp_massey(&s);
         let roots = chien_search(&lambda, enc.len());
         assert!(
             roots.contains(&pos),
@@ -359,7 +359,7 @@ mod tests {
         let mut enc = crate::encode::encode_blocks(&data, 11, 4).unwrap();
         enc[4] ^= 0x2B;
         let synd = syndromes(&enc, 4);
-        let lambda = berlekamp_massey(&synd, 2);
+        let lambda = berlekamp_massey(&synd);
         let positions = chien_search(&lambda, enc.len());
         // Real syndromes → a real nonzero magnitude is returned.
         assert!(forney(&synd, &lambda, &positions, enc.len()).is_some());
@@ -402,7 +402,7 @@ mod tests {
         let pos = 9usize;
         enc[pos] ^= 0xC4;
         let s = syndromes(&enc, 4);
-        let lambda = berlekamp_massey(&s, 2);
+        let lambda = berlekamp_massey(&s);
         let positions = chien_search(&lambda, enc.len());
         let mags = forney(&s, &lambda, &positions, enc.len()).unwrap();
         for (k, &p) in positions.iter().enumerate() {
