@@ -1,5 +1,5 @@
 // Author: Julian Bolivar
-// Version: 0.0.1
+// Version: 0.1.0
 // Date: 2026-07-01
 //
 // Fuzz target: `ReedSolomon::encode` must never panic or overflow on arbitrary
