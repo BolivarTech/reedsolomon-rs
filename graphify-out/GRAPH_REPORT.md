@@ -1,16 +1,16 @@
 # Graph Report - reedsolomon  (2026-07-02)
 
 ## Corpus Check
-- 49 files · ~29,060 words
+- 49 files · ~29,849 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 271 nodes · 340 edges · 31 communities (20 shown, 11 thin omitted)
+- 280 nodes · 349 edges · 31 communities (20 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8ecc0223`
+- Built from commit: `c127cb8a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -49,24 +49,24 @@
 2. `ReedSolomon` - 13 edges
 3. `encode_framed()` - 13 edges
 4. `decode_block()` - 12 edges
-5. `syndromes()` - 9 edges
-6. `encode_blocks()` - 8 edges
-7. `Task 1 Report — GF(2^8) field constants + EXP/LOG tables` - 8 edges
-8. `Task 2 Report — GF(2^8) Arithmetic Operations` - 8 edges
-9. `Task 5 Report: Systematic Encoder (`encode.rs`)` - 8 edges
-10. `berlekamp_massey()` - 7 edges
+5. `reedsolomon` - 11 edges
+6. `syndromes()` - 9 edges
+7. `encode_blocks()` - 8 edges
+8. `Task 1 Report — GF(2^8) field constants + EXP/LOG tables` - 8 edges
+9. `Task 2 Report — GF(2^8) Arithmetic Operations` - 8 edges
+10. `Task 5 Report: Systematic Encoder (`encode.rs`)` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `encode_framed()` --calls--> `crc32()`  [INFERRED]
   src/frame.rs → src/crc.rs
-- `decode_block()` --references--> `RsError`  [EXTRACTED]
-  src/decode.rs → src/lib.rs
-- `decode_blocks()` --references--> `RsError`  [EXTRACTED]
-  src/decode.rs → src/lib.rs
 - `encode_blocks()` --references--> `RsError`  [EXTRACTED]
   src/encode.rs → src/lib.rs
-- `decode_framed()` --references--> `RsError`  [EXTRACTED]
+- `encode_framed()` --references--> `RsError`  [EXTRACTED]
   src/frame.rs → src/lib.rs
+- `encode_framed()` --references--> `ReedSolomon`  [EXTRACTED]
+  src/frame.rs → src/lib.rs
+- `decode_block()` --references--> `RsError`  [EXTRACTED]
+  src/decode.rs → src/lib.rs
 
 ## Import Cycles
 - None detected.
@@ -74,8 +74,8 @@
 ## Communities (31 total, 11 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.15
-Nodes (13): Default, Display, Error, Formatter, Result, Self, default_fails_loud_on_17_errors(), default_is_rs_255_223() (+5 more)
+Cohesion: 0.14
+Nodes (19): Default, Display, Error, Formatter, Result, RsError, Self, decode_block() (+11 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.09
@@ -86,8 +86,8 @@ Cohesion: 0.27
 Nodes (7): Option, build_generator(), encode_blocks(), encode_is_systematic_and_right_length(), encode_multiblock_length(), encoded_len(), generator_has_expected_shape_and_roots()
 
 ### Community 3 - "Crate Configuration"
-Cohesion: 0.33
-Nodes (5): Design invariant, Example, License, reedsolomon, Why a dedicated crate
+Cohesion: 0.13
+Nodes (14): Contribution, Convention, Correctness Guarantee, Credits, Features, Framed path (self-describing), How It Works, Installation (+6 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.11
@@ -115,7 +115,7 @@ Nodes (9): §0.1 Evidence (GREEN), Commit SHAs, Concerns, GREEN Phase, RED Phase
 
 ### Community 10 - "Community 10"
 Cohesion: 0.09
-Nodes (9): ReedSolomon, crc32(), decode_framed(), encode_framed(), framed_rejects_bad_magic(), framed_rejects_corrupted_header(), framed_rejects_parameter_mismatch(), framed_rejects_unsupported_version() (+1 more)
+Nodes (8): ReedSolomon, crc32(), encode_framed(), framed_rejects_bad_magic(), framed_rejects_corrupted_header(), framed_rejects_parameter_mismatch(), framed_rejects_unsupported_version(), framed_round_trips()
 
 ### Community 11 - "Community 11"
 Cohesion: 0.20
@@ -139,27 +139,27 @@ Nodes (5): §6 pre-merge gate — execution plan (durable note), Aggregation & p
 
 ### Community 27 - "Community 27"
 Cohesion: 0.23
-Nodes (16): RsError, all_zero(), berlekamp_massey(), bm_locator_degree_matches_single_error(), chien_finds_the_injected_position(), chien_search(), clean_codeword_has_zero_syndromes(), decode_block() (+8 more)
+Nodes (11): all_zero(), berlekamp_massey(), bm_locator_degree_matches_single_error(), chien_finds_the_injected_position(), chien_search(), clean_codeword_has_zero_syndromes(), decode_block_recovers_up_to_t_errors(), forney_corrects_a_single_known_error() (+3 more)
 
 ## Knowledge Gaps
-- **100 isolated node(s):** `Why a dedicated crate`, `Design invariant`, `Example`, `License`, `Gate structure` (+95 more)
+- **107 isolated node(s):** `Features`, `Installation`, `Raw path (zero overhead)`, `Framed path (self-describing)`, `How It Works` (+102 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `encode_framed()` connect `Community 10` to `Community 0`, `Community 27`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `encode_framed()` connect `Community 10` to `Community 0`?**
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Why does `RsError` connect `Community 0` to `Community 10`, `Community 2`, `Community 27`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `decode_framed()` connect `Community 10` to `Community 0`, `Community 27`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
-- **What connects `Why a dedicated crate`, `Design invariant`, `Example` to the rest of the system?**
-  _100 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `decode_framed()` connect `Community 0` to `Community 10`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **What connects `Features`, `Installation`, `Raw path (zero overhead)` to the rest of the system?**
+  _107 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.13978494623655913 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.1067193675889328 - nodes in this community are weakly interconnected._
-- **Should `Community 5` be split into smaller, more focused modules?**
-  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
+- **Should `Crate Configuration` be split into smaller, more focused modules?**
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

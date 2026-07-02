@@ -24,44 +24,134 @@
       "norm_label": "reedsolomon"
     },
     {
-      "label": "Why a dedicated crate",
+      "label": "Features",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L12",
+      "source_location": "L23",
       "_origin": "ast",
-      "id": "readme_why_a_dedicated_crate",
+      "id": "readme_features",
       "community": 3,
-      "norm_label": "why a dedicated crate"
+      "norm_label": "features"
     },
     {
-      "label": "Design invariant",
+      "label": "Installation",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L20",
+      "source_location": "L35",
       "_origin": "ast",
-      "id": "readme_design_invariant",
+      "id": "readme_installation",
       "community": 3,
-      "norm_label": "design invariant"
+      "norm_label": "installation"
     },
     {
-      "label": "Example",
+      "label": "Quick Start",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L27",
+      "source_location": "L42",
       "_origin": "ast",
-      "id": "readme_example",
+      "id": "readme_quick_start",
       "community": 3,
-      "norm_label": "example"
+      "norm_label": "quick start"
+    },
+    {
+      "label": "Raw path (zero overhead)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "readme_raw_path_zero_overhead",
+      "community": 3,
+      "norm_label": "raw path (zero overhead)"
+    },
+    {
+      "label": "Framed path (self-describing)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "readme_framed_path_self_describing",
+      "community": 3,
+      "norm_label": "framed path (self-describing)"
+    },
+    {
+      "label": "How It Works",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "readme_how_it_works",
+      "community": 3,
+      "norm_label": "how it works"
+    },
+    {
+      "label": "Correctness Guarantee",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "readme_correctness_guarantee",
+      "community": 3,
+      "norm_label": "correctness guarantee"
+    },
+    {
+      "label": "Convention",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L136",
+      "_origin": "ast",
+      "id": "readme_convention",
+      "community": 3,
+      "norm_label": "convention"
+    },
+    {
+      "label": "Testing",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L154",
+      "_origin": "ast",
+      "id": "readme_testing",
+      "community": 3,
+      "norm_label": "testing"
+    },
+    {
+      "label": "Minimum Supported Rust Version",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L170",
+      "_origin": "ast",
+      "id": "readme_minimum_supported_rust_version",
+      "community": 3,
+      "norm_label": "minimum supported rust version"
     },
     {
       "label": "License",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L38",
+      "source_location": "L174",
       "_origin": "ast",
       "id": "readme_license",
       "community": 3,
       "norm_label": "license"
+    },
+    {
+      "label": "Contribution",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L179",
+      "_origin": "ast",
+      "id": "readme_contribution",
+      "community": 3,
+      "norm_label": "contribution"
+    },
+    {
+      "label": "Credits",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L185",
+      "_origin": "ast",
+      "id": "readme_credits",
+      "community": 3,
+      "norm_label": "credits"
     },
     {
       "label": "lib.rs",
@@ -199,7 +289,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "vec",
       "id": "vec"
     },
@@ -379,7 +469,7 @@
       "source_file": "src/decode.rs",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "forney()",
       "id": "src_decode_forney"
     },
@@ -399,7 +489,7 @@
       "source_file": "src/decode.rs",
       "source_location": "L186",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "decode_block()",
       "id": "src_decode_decode_block"
     },
@@ -409,7 +499,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "rserror",
       "id": "rserror"
     },
@@ -419,7 +509,7 @@
       "source_file": "src/decode.rs",
       "source_location": "L226",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "decode_blocks()",
       "id": "src_decode_decode_blocks"
     },
@@ -799,7 +889,7 @@
       "source_file": "src/frame.rs",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 10,
+      "community": 0,
       "norm_label": "decode_framed()",
       "id": "src_frame_decode_framed"
     },
@@ -2729,20 +2819,60 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L18",
+      "source_location": "L136",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_design_invariant"
+      "target": "readme_convention",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L27",
+      "source_location": "L122",
       "weight": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_example",
+      "target": "readme_correctness_guarantee",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_credits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_features",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_how_it_works",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_installation",
       "confidence_score": 1.0
     },
     {
@@ -2759,11 +2889,61 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L10",
+      "source_location": "L170",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_why_a_dedicated_crate"
+      "target": "readme_minimum_supported_rust_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_quick_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_testing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "readme_quick_start",
+      "target": "readme_framed_path_self_describing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "readme_quick_start",
+      "target": "readme_raw_path_zero_overhead",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "readme_license",
+      "target": "readme_contribution",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6231,5 +6411,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8ecc022370cd9d41325b2a76213114917c9b85de"
+  "built_at_commit": "c127cb8a0bb8b0c2b03e20286fe870844450484d"
 }
