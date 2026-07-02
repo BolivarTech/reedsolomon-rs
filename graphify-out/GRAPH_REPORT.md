@@ -1,16 +1,16 @@
-# Graph Report - reedsolomon  (2026-07-01)
+# Graph Report - reedsolomon  (2026-07-02)
 
 ## Corpus Check
-- 49 files · ~28,514 words
+- 49 files · ~29,060 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 268 nodes · 331 edges · 31 communities (20 shown, 11 thin omitted)
+- 271 nodes · 340 edges · 31 communities (20 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5f46fd94`
+- Built from commit: `8ecc0223`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -48,13 +48,13 @@
 1. `RsError` - 16 edges
 2. `ReedSolomon` - 13 edges
 3. `encode_framed()` - 13 edges
-4. `decode_block()` - 11 edges
-5. `syndromes()` - 8 edges
+4. `decode_block()` - 12 edges
+5. `syndromes()` - 9 edges
 6. `encode_blocks()` - 8 edges
 7. `Task 1 Report — GF(2^8) field constants + EXP/LOG tables` - 8 edges
 8. `Task 2 Report — GF(2^8) Arithmetic Operations` - 8 edges
 9. `Task 5 Report: Systematic Encoder (`encode.rs`)` - 8 edges
-10. `decode_framed()` - 7 edges
+10. `berlekamp_massey()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `encode_framed()` --calls--> `crc32()`  [INFERRED]
@@ -87,7 +87,7 @@ Nodes (7): Option, build_generator(), encode_blocks(), encode_is_systematic_and_
 
 ### Community 3 - "Crate Configuration"
 Cohesion: 0.33
-Nodes (5): Design invariant, Example (target API), License, reedsolomon, Why a dedicated crate
+Nodes (5): Design invariant, Example, License, reedsolomon, Why a dedicated crate
 
 ### Community 4 - "Community 4"
 Cohesion: 0.11
@@ -115,7 +115,7 @@ Nodes (9): §0.1 Evidence (GREEN), Commit SHAs, Concerns, GREEN Phase, RED Phase
 
 ### Community 10 - "Community 10"
 Cohesion: 0.09
-Nodes (10): ReedSolomon, RsError, crc32(), decode_framed(), encode_framed(), framed_rejects_bad_magic(), framed_rejects_corrupted_header(), framed_rejects_parameter_mismatch() (+2 more)
+Nodes (9): ReedSolomon, crc32(), decode_framed(), encode_framed(), framed_rejects_bad_magic(), framed_rejects_corrupted_header(), framed_rejects_parameter_mismatch(), framed_rejects_unsupported_version() (+1 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.20
@@ -138,11 +138,11 @@ Cohesion: 0.33
 Nodes (5): §6 pre-merge gate — execution plan (durable note), Aggregation & progression to §7, Budget & objective, Gate structure, Segments (self-contained; split further if a single one still overflows)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.29
-Nodes (14): all_zero(), berlekamp_massey(), bm_locator_degree_matches_single_error(), chien_finds_the_injected_position(), chien_search(), clean_codeword_has_zero_syndromes(), decode_block(), decode_block_recovers_up_to_t_errors() (+6 more)
+Cohesion: 0.23
+Nodes (16): RsError, all_zero(), berlekamp_massey(), bm_locator_degree_matches_single_error(), chien_finds_the_injected_position(), chien_search(), clean_codeword_has_zero_syndromes(), decode_block() (+8 more)
 
 ## Knowledge Gaps
-- **100 isolated node(s):** `Why a dedicated crate`, `Design invariant`, `Example (target API)`, `License`, `Gate structure` (+95 more)
+- **100 isolated node(s):** `Why a dedicated crate`, `Design invariant`, `Example`, `License`, `Gate structure` (+95 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -152,10 +152,10 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `encode_framed()` connect `Community 10` to `Community 0`, `Community 27`?**
   _High betweenness centrality (0.043) - this node is a cross-community bridge._
 - **Why does `RsError` connect `Community 0` to `Community 10`, `Community 2`, `Community 27`?**
-  _High betweenness centrality (0.039) - this node is a cross-community bridge._
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
 - **Why does `decode_framed()` connect `Community 10` to `Community 0`, `Community 27`?**
   _High betweenness centrality (0.021) - this node is a cross-community bridge._
-- **What connects `Why a dedicated crate`, `Design invariant`, `Example (target API)` to the rest of the system?**
+- **What connects `Why a dedicated crate`, `Design invariant`, `Example` to the rest of the system?**
   _100 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._

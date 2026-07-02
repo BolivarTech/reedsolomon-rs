@@ -1,7 +1,7 @@
 {
   "src/lib.rs": {
-    "mtime": 1782956291.2668483,
-    "ast_hash": "300a1765842e18a06444a764faca17d6",
+    "mtime": 1782965964.885756,
+    "ast_hash": "5b4094e68bb7ba6d4af3485a17398036",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1782708945.4784062,
-    "ast_hash": "ae8e6f4b5063096f8d1d211cf9cefaa3",
+    "mtime": 1782967398.6901274,
+    "ast_hash": "922637e8bb3cac1e1954e2c6b2cfd85f",
     "semantic_hash": ""
   },
   "src/gf256.rs": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "src/poly.rs": {
-    "mtime": 1782733883.857257,
-    "ast_hash": "7212f0846d50df6c084388cadadd496b",
+    "mtime": 1782965929.7085943,
+    "ast_hash": "8b32b2cbc0fa368c966f419117801a3e",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-3-brief.md": {
@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "src/decode.rs": {
-    "mtime": 1782733168.0178714,
-    "ast_hash": "0c6aff43c8e4e19dac90a01b41939d50",
+    "mtime": 1782965214.4277284,
+    "ast_hash": "1e6235ba8670f7c5cb145815e324fd8c",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-6-brief.md": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "tests/roundtrip.rs": {
-    "mtime": 1782953868.8416572,
-    "ast_hash": "aa215b08902b99dcff974d96a2546e4d",
+    "mtime": 1782967354.5201254,
+    "ast_hash": "240a775000d73f75fc9e5ee2c9f4a58a",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-11C-report.md": {
@@ -235,23 +235,23 @@
     "semantic_hash": ""
   },
   "tests/edge.rs": {
-    "mtime": 1782954133.931736,
-    "ast_hash": "0b5ed09ba90c00ee5590b542e514cadd",
+    "mtime": 1782967347.0368226,
+    "ast_hash": "e16f78818b9f1057b04b9188664dafee",
     "semantic_hash": ""
   },
   "fuzz/fuzz_targets/decode_target.rs": {
-    "mtime": 1782954312.0304532,
-    "ast_hash": "9f3594439847f5fba33f74eea13d52c8",
+    "mtime": 1782967363.518303,
+    "ast_hash": "665ebac9c0c6f742bbab5001a40cb8c6",
     "semantic_hash": ""
   },
   "fuzz/fuzz_targets/encode_target.rs": {
-    "mtime": 1782954321.6834762,
-    "ast_hash": "dad1a17c88ee25fd517474649680cd40",
+    "mtime": 1782967370.8911717,
+    "ast_hash": "4f1ddeefad5125ba743f487aad004126",
     "semantic_hash": ""
   },
   "fuzz/fuzz_targets/framed_target.rs": {
-    "mtime": 1782954330.4005487,
-    "ast_hash": "616b8fa3810426e6bb624301d47a7764",
+    "mtime": 1782967378.5243554,
+    "ast_hash": "3164e4ad646f94879ce6f2cdafa9992d",
     "semantic_hash": ""
   }
 }
