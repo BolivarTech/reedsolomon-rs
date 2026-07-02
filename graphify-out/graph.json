@@ -4,14 +4,74 @@
   "graph": {},
   "nodes": [
     {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 3,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "reedsolomon",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_reedsolomon",
+      "community": 3,
+      "norm_label": "reedsolomon"
+    },
+    {
+      "label": "Why a dedicated crate",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "readme_why_a_dedicated_crate",
+      "community": 3,
+      "norm_label": "why a dedicated crate"
+    },
+    {
+      "label": "Design invariant",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "readme_design_invariant",
+      "community": 3,
+      "norm_label": "design invariant"
+    },
+    {
+      "label": "Example (target API)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "readme_example_target_api",
+      "community": 3,
+      "norm_label": "example (target api)"
+    },
+    {
+      "label": "License",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "readme_license",
+      "community": 3,
+      "norm_label": "license"
+    },
+    {
       "label": "lib.rs",
       "file_type": "code",
       "source_file": "src/lib.rs",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_lib",
       "community": 0,
-      "norm_label": "lib.rs"
+      "norm_label": "lib.rs",
+      "id": "src_lib"
     },
     {
       "label": "RsError",
@@ -19,9 +79,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L96",
       "_origin": "ast",
-      "id": "src_lib_rserror",
       "community": 0,
-      "norm_label": "rserror"
+      "norm_label": "rserror",
+      "id": "src_lib_rserror"
     },
     {
       "label": "Display",
@@ -29,9 +89,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "display",
       "community": 0,
-      "norm_label": "display"
+      "norm_label": "display",
+      "id": "display"
     },
     {
       "label": ".fmt()",
@@ -39,9 +99,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L109",
       "_origin": "ast",
-      "id": "src_lib_rserror_fmt",
       "community": 0,
-      "norm_label": ".fmt()"
+      "norm_label": ".fmt()",
+      "id": "src_lib_rserror_fmt"
     },
     {
       "label": "Formatter",
@@ -49,9 +109,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "formatter",
       "community": 0,
-      "norm_label": "formatter"
+      "norm_label": "formatter",
+      "id": "formatter"
     },
     {
       "label": "Result",
@@ -59,9 +119,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "result",
       "community": 0,
-      "norm_label": "result"
+      "norm_label": "result",
+      "id": "result"
     },
     {
       "label": "Error",
@@ -69,9 +129,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "error",
       "community": 0,
-      "norm_label": "error"
+      "norm_label": "error",
+      "id": "error"
     },
     {
       "label": "ReedSolomon",
@@ -79,9 +139,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon",
       "community": 0,
-      "norm_label": "reedsolomon"
+      "norm_label": "reedsolomon",
+      "id": "src_lib_reedsolomon"
     },
     {
       "label": "Default",
@@ -89,9 +149,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "default",
       "community": 0,
-      "norm_label": "default"
+      "norm_label": "default",
+      "id": "default"
     },
     {
       "label": ".default()",
@@ -99,9 +159,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L132",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_default",
       "community": 0,
-      "norm_label": ".default()"
+      "norm_label": ".default()",
+      "id": "src_lib_reedsolomon_default"
     },
     {
       "label": "Self",
@@ -109,9 +169,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "self",
       "community": 0,
-      "norm_label": "self"
+      "norm_label": "self",
+      "id": "self"
     },
     {
       "label": ".new()",
@@ -119,9 +179,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L146",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_new",
       "community": 0,
-      "norm_label": ".new()"
+      "norm_label": ".new()",
+      "id": "src_lib_reedsolomon_new"
     },
     {
       "label": ".encode()",
@@ -129,9 +189,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L168",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_encode",
       "community": 0,
-      "norm_label": ".encode()"
+      "norm_label": ".encode()",
+      "id": "src_lib_reedsolomon_encode"
     },
     {
       "label": "Vec",
@@ -139,9 +199,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "vec",
       "community": 27,
-      "norm_label": "vec"
+      "norm_label": "vec",
+      "id": "vec"
     },
     {
       "label": ".decode()",
@@ -149,9 +209,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L216",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_decode",
       "community": 0,
-      "norm_label": ".decode()"
+      "norm_label": ".decode()",
+      "id": "src_lib_reedsolomon_decode"
     },
     {
       "label": ".parity_len()",
@@ -159,9 +219,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L221",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_parity_len",
       "community": 0,
-      "norm_label": ".parity_len()"
+      "norm_label": ".parity_len()",
+      "id": "src_lib_reedsolomon_parity_len"
     },
     {
       "label": ".data_len()",
@@ -169,9 +229,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L226",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_data_len",
       "community": 0,
-      "norm_label": ".data_len()"
+      "norm_label": ".data_len()",
+      "id": "src_lib_reedsolomon_data_len"
     },
     {
       "label": ".encode_framed()",
@@ -179,9 +239,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L239",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_encode_framed",
       "community": 0,
-      "norm_label": ".encode_framed()"
+      "norm_label": ".encode_framed()",
+      "id": "src_lib_reedsolomon_encode_framed"
     },
     {
       "label": ".decode_framed()",
@@ -189,9 +249,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L260",
       "_origin": "ast",
-      "id": "src_lib_reedsolomon_decode_framed",
       "community": 0,
-      "norm_label": ".decode_framed()"
+      "norm_label": ".decode_framed()",
+      "id": "src_lib_reedsolomon_decode_framed"
     },
     {
       "label": "new_rejects_oversized_block()",
@@ -199,9 +259,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L270",
       "_origin": "ast",
-      "id": "src_lib_new_rejects_oversized_block",
       "community": 0,
-      "norm_label": "new_rejects_oversized_block()"
+      "norm_label": "new_rejects_oversized_block()",
+      "id": "src_lib_new_rejects_oversized_block"
     },
     {
       "label": "new_rejects_zero_lengths()",
@@ -209,9 +269,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L278",
       "_origin": "ast",
-      "id": "src_lib_new_rejects_zero_lengths",
       "community": 0,
-      "norm_label": "new_rejects_zero_lengths()"
+      "norm_label": "new_rejects_zero_lengths()",
+      "id": "src_lib_new_rejects_zero_lengths"
     },
     {
       "label": "default_is_rs_255_223()",
@@ -219,9 +279,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L284",
       "_origin": "ast",
-      "id": "src_lib_default_is_rs_255_223",
       "community": 0,
-      "norm_label": "default_is_rs_255_223()"
+      "norm_label": "default_is_rs_255_223()",
+      "id": "src_lib_default_is_rs_255_223"
     },
     {
       "label": "default_round_trips_short_payload()",
@@ -229,9 +289,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L291",
       "_origin": "ast",
-      "id": "src_lib_default_round_trips_short_payload",
       "community": 0,
-      "norm_label": "default_round_trips_short_payload()"
+      "norm_label": "default_round_trips_short_payload()",
+      "id": "src_lib_default_round_trips_short_payload"
     },
     {
       "label": "default_recovers_16_errors_per_block()",
@@ -239,9 +299,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L300",
       "_origin": "ast",
-      "id": "src_lib_default_recovers_16_errors_per_block",
       "community": 0,
-      "norm_label": "default_recovers_16_errors_per_block()"
+      "norm_label": "default_recovers_16_errors_per_block()",
+      "id": "src_lib_default_recovers_16_errors_per_block"
     },
     {
       "label": "public_framed_methods_round_trip()",
@@ -249,9 +309,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L311",
       "_origin": "ast",
-      "id": "src_lib_public_framed_methods_round_trip",
       "community": 0,
-      "norm_label": "public_framed_methods_round_trip()"
+      "norm_label": "public_framed_methods_round_trip()",
+      "id": "src_lib_public_framed_methods_round_trip"
     },
     {
       "label": "default_fails_loud_on_17_errors()",
@@ -259,9 +319,9 @@
       "source_file": "src/lib.rs",
       "source_location": "L319",
       "_origin": "ast",
-      "id": "src_lib_default_fails_loud_on_17_errors",
       "community": 0,
-      "norm_label": "default_fails_loud_on_17_errors()"
+      "norm_label": "default_fails_loud_on_17_errors()",
+      "id": "src_lib_default_fails_loud_on_17_errors"
     },
     {
       "label": "decode_target.rs",
@@ -2622,105 +2682,59 @@
       "community": 13,
       "norm_label": "concerns / deviations",
       "id": "sdd_task_9_report_concerns_deviations"
-    },
-    {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "readme.md",
-      "id": "readme"
-    },
-    {
-      "label": "reedsolomon",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "reedsolomon",
-      "id": "readme_reedsolomon"
-    },
-    {
-      "label": "Why a dedicated crate",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "why a dedicated crate",
-      "id": "readme_why_a_dedicated_crate"
-    },
-    {
-      "label": "Design invariant",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "design invariant",
-      "id": "readme_design_invariant"
-    },
-    {
-      "label": "Example (target API)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "example (target api)",
-      "id": "readme_example_target_api"
-    },
-    {
-      "label": "License",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "license",
-      "id": "readme_license"
-    },
-    {
-      "label": "RS(255, 223) code configuration",
-      "file_type": "document",
-      "source_file": "README.md",
-      "community": 3,
-      "norm_label": "rs(255, 223) code configuration",
-      "community_name": "Crate Configuration",
-      "id": "readme_rs_255_223"
-    },
-    {
-      "label": "cryptovault crate",
-      "file_type": "document",
-      "source_file": "README.md",
-      "community": 3,
-      "norm_label": "cryptovault crate",
-      "community_name": "Crate Configuration",
-      "id": "readme_cryptovault"
-    },
-    {
-      "label": "encode method",
-      "file_type": "document",
-      "source_file": "README.md",
-      "community": 3,
-      "norm_label": "encode method",
-      "community_name": "Crate Configuration",
-      "id": "readme_encode"
-    },
-    {
-      "label": "decode method",
-      "file_type": "document",
-      "source_file": "README.md",
-      "community": 3,
-      "norm_label": "decode method",
-      "community_name": "Crate Configuration",
-      "id": "readme_decode"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme",
+      "target": "readme_reedsolomon"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_design_invariant"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_example_target_api"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_license"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_reedsolomon",
+      "target": "readme_why_a_dedicated_crate"
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -6088,90 +6102,8 @@
       "confidence_score": 1.0,
       "source": "sdd_task_9_report_tdd_steps",
       "target": "sdd_task_9_report_refactor_none"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme",
-      "target": "readme_reedsolomon"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source": "readme_cryptovault",
-      "target": "readme_reedsolomon"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source": "readme_reedsolomon",
-      "target": "readme_decode"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_reedsolomon",
-      "target": "readme_design_invariant"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source": "readme_reedsolomon",
-      "target": "readme_encode"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_reedsolomon",
-      "target": "readme_example_target_api"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_reedsolomon",
-      "target": "readme_license"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source": "readme_reedsolomon",
-      "target": "readme_rs_255_223"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_reedsolomon",
-      "target": "readme_why_a_dedicated_crate"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cdb9e513c8aed127e2fab7bcdf95257b33457322"
+  "built_at_commit": "5f46fd9457db416aef1e167acbedfa9f33da8ae7"
 }

@@ -234,11 +234,6 @@
     "ast_hash": "1e142a77d1593468cd83bfb41e6328ce",
     "semantic_hash": ""
   },
-  "claude-usage.txt": {
-    "mtime": 1782953385.0629797,
-    "ast_hash": "9c79a6eea159f64ed2c8cee0be1856a8",
-    "semantic_hash": ""
-  },
   "tests/edge.rs": {
     "mtime": 1782954133.931736,
     "ast_hash": "0b5ed09ba90c00ee5590b542e514cadd",
