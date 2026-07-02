@@ -13,3 +13,4 @@ categories = ["encoding"]
 [dependencies]
 
 [dev-dependencies]
+proptest = "1"
