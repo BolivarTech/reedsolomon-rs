@@ -253,5 +253,10 @@
     "mtime": 1782967378.5243554,
     "ast_hash": "3164e4ad646f94879ce6f2cdafa9992d",
     "semantic_hash": ""
+  },
+  "docs/AUDIT-2026-07-02.md": {
+    "mtime": 1782977705.8287063,
+    "ast_hash": "77b20ffd9d6af3888819036839459159",
+    "semantic_hash": ""
   }
 }

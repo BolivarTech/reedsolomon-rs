@@ -4,14 +4,94 @@
   "graph": {},
   "nodes": [
     {
+      "label": "AUDIT-2026-07-02.md",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02",
+      "community": 31,
+      "norm_label": "audit-2026-07-02.md"
+    },
+    {
+      "label": "Code Audit Report \u2014 `reedsolomon` v0.1.0",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "community": 31,
+      "norm_label": "code audit report \u2014 `reedsolomon` v0.1.0"
+    },
+    {
+      "label": "1. Methodology",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_1_methodology",
+      "community": 31,
+      "norm_label": "1. methodology"
+    },
+    {
+      "label": "2. Quality gates (executed during the audit)",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_2_quality_gates_executed_during_the_audit",
+      "community": 31,
+      "norm_label": "2. quality gates (executed during the audit)"
+    },
+    {
+      "label": "3. Invariant verification",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_3_invariant_verification",
+      "community": 31,
+      "norm_label": "3. invariant verification"
+    },
+    {
+      "label": "4. Codec mathematics review",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_4_codec_mathematics_review",
+      "community": 31,
+      "norm_label": "4. codec mathematics review"
+    },
+    {
+      "label": "5. Findings and remediation",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_5_findings_and_remediation",
+      "community": 31,
+      "norm_label": "5. findings and remediation"
+    },
+    {
+      "label": "6. Conclusion",
+      "file_type": "document",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "docs_audit_2026_07_02_6_conclusion",
+      "community": 31,
+      "norm_label": "6. conclusion"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme",
       "community": 3,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "readme"
     },
     {
       "label": "reedsolomon",
@@ -19,9 +99,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_reedsolomon",
       "community": 3,
-      "norm_label": "reedsolomon"
+      "norm_label": "reedsolomon",
+      "id": "readme_reedsolomon"
     },
     {
       "label": "Features",
@@ -29,9 +109,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "readme_features",
       "community": 3,
-      "norm_label": "features"
+      "norm_label": "features",
+      "id": "readme_features"
     },
     {
       "label": "Installation",
@@ -39,9 +119,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "readme_installation",
       "community": 3,
-      "norm_label": "installation"
+      "norm_label": "installation",
+      "id": "readme_installation"
     },
     {
       "label": "Quick Start",
@@ -49,9 +129,9 @@
       "source_file": "README.md",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "readme_quick_start",
       "community": 3,
-      "norm_label": "quick start"
+      "norm_label": "quick start",
+      "id": "readme_quick_start"
     },
     {
       "label": "Raw path (zero overhead)",
@@ -59,9 +139,9 @@
       "source_file": "README.md",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "readme_raw_path_zero_overhead",
       "community": 3,
-      "norm_label": "raw path (zero overhead)"
+      "norm_label": "raw path (zero overhead)",
+      "id": "readme_raw_path_zero_overhead"
     },
     {
       "label": "Framed path (self-describing)",
@@ -69,9 +149,9 @@
       "source_file": "README.md",
       "source_location": "L78",
       "_origin": "ast",
-      "id": "readme_framed_path_self_describing",
       "community": 3,
-      "norm_label": "framed path (self-describing)"
+      "norm_label": "framed path (self-describing)",
+      "id": "readme_framed_path_self_describing"
     },
     {
       "label": "How It Works",
@@ -79,9 +159,9 @@
       "source_file": "README.md",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "readme_how_it_works",
       "community": 3,
-      "norm_label": "how it works"
+      "norm_label": "how it works",
+      "id": "readme_how_it_works"
     },
     {
       "label": "Correctness Guarantee",
@@ -89,9 +169,9 @@
       "source_file": "README.md",
       "source_location": "L122",
       "_origin": "ast",
-      "id": "readme_correctness_guarantee",
       "community": 3,
-      "norm_label": "correctness guarantee"
+      "norm_label": "correctness guarantee",
+      "id": "readme_correctness_guarantee"
     },
     {
       "label": "Convention",
@@ -99,9 +179,9 @@
       "source_file": "README.md",
       "source_location": "L136",
       "_origin": "ast",
-      "id": "readme_convention",
       "community": 3,
-      "norm_label": "convention"
+      "norm_label": "convention",
+      "id": "readme_convention"
     },
     {
       "label": "Testing",
@@ -109,9 +189,9 @@
       "source_file": "README.md",
       "source_location": "L154",
       "_origin": "ast",
-      "id": "readme_testing",
       "community": 3,
-      "norm_label": "testing"
+      "norm_label": "testing",
+      "id": "readme_testing"
     },
     {
       "label": "Minimum Supported Rust Version",
@@ -119,9 +199,9 @@
       "source_file": "README.md",
       "source_location": "L170",
       "_origin": "ast",
-      "id": "readme_minimum_supported_rust_version",
       "community": 3,
-      "norm_label": "minimum supported rust version"
+      "norm_label": "minimum supported rust version",
+      "id": "readme_minimum_supported_rust_version"
     },
     {
       "label": "License",
@@ -129,9 +209,9 @@
       "source_file": "README.md",
       "source_location": "L174",
       "_origin": "ast",
-      "id": "readme_license",
       "community": 3,
-      "norm_label": "license"
+      "norm_label": "license",
+      "id": "readme_license"
     },
     {
       "label": "Contribution",
@@ -139,9 +219,9 @@
       "source_file": "README.md",
       "source_location": "L179",
       "_origin": "ast",
-      "id": "readme_contribution",
       "community": 3,
-      "norm_label": "contribution"
+      "norm_label": "contribution",
+      "id": "readme_contribution"
     },
     {
       "label": "Credits",
@@ -149,9 +229,9 @@
       "source_file": "README.md",
       "source_location": "L185",
       "_origin": "ast",
-      "id": "readme_credits",
       "community": 3,
-      "norm_label": "credits"
+      "norm_label": "credits",
+      "id": "readme_credits"
     },
     {
       "label": "lib.rs",
@@ -459,7 +539,7 @@
       "source_file": "src/decode.rs",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 27,
+      "community": 0,
       "norm_label": "chien_search()",
       "id": "src_decode_chien_search"
     },
@@ -469,7 +549,7 @@
       "source_file": "src/decode.rs",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 0,
+      "community": 27,
       "norm_label": "forney()",
       "id": "src_decode_forney"
     },
@@ -479,7 +559,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
+      "community": 27,
       "norm_label": "option",
       "id": "option"
     },
@@ -2808,6 +2888,76 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02",
+      "target": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_1_methodology",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_2_quality_gates_executed_during_the_audit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_3_invariant_verification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_4_codec_mathematics_review",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_5_findings_and_remediation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDIT-2026-07-02.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "docs_audit_2026_07_02_code_audit_report_reedsolomon_v0_1_0",
+      "target": "docs_audit_2026_07_02_6_conclusion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -2821,9 +2971,9 @@
       "source_file": "README.md",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_convention",
-      "confidence_score": 1.0
+      "target": "readme_convention"
     },
     {
       "relation": "contains",
@@ -2831,9 +2981,9 @@
       "source_file": "README.md",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_correctness_guarantee",
-      "confidence_score": 1.0
+      "target": "readme_correctness_guarantee"
     },
     {
       "relation": "contains",
@@ -2841,9 +2991,9 @@
       "source_file": "README.md",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_credits",
-      "confidence_score": 1.0
+      "target": "readme_credits"
     },
     {
       "relation": "contains",
@@ -2851,9 +3001,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_features",
-      "confidence_score": 1.0
+      "target": "readme_features"
     },
     {
       "relation": "contains",
@@ -2861,9 +3011,9 @@
       "source_file": "README.md",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_how_it_works",
-      "confidence_score": 1.0
+      "target": "readme_how_it_works"
     },
     {
       "relation": "contains",
@@ -2871,9 +3021,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_installation",
-      "confidence_score": 1.0
+      "target": "readme_installation"
     },
     {
       "relation": "contains",
@@ -2891,9 +3041,9 @@
       "source_file": "README.md",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_minimum_supported_rust_version",
-      "confidence_score": 1.0
+      "target": "readme_minimum_supported_rust_version"
     },
     {
       "relation": "contains",
@@ -2901,9 +3051,9 @@
       "source_file": "README.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_quick_start",
-      "confidence_score": 1.0
+      "target": "readme_quick_start"
     },
     {
       "relation": "contains",
@@ -2911,9 +3061,9 @@
       "source_file": "README.md",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_reedsolomon",
-      "target": "readme_testing",
-      "confidence_score": 1.0
+      "target": "readme_testing"
     },
     {
       "relation": "contains",
@@ -2921,9 +3071,9 @@
       "source_file": "README.md",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_quick_start",
-      "target": "readme_framed_path_self_describing",
-      "confidence_score": 1.0
+      "target": "readme_framed_path_self_describing"
     },
     {
       "relation": "contains",
@@ -2931,9 +3081,9 @@
       "source_file": "README.md",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_quick_start",
-      "target": "readme_raw_path_zero_overhead",
-      "confidence_score": 1.0
+      "target": "readme_raw_path_zero_overhead"
     },
     {
       "relation": "contains",
@@ -2941,9 +3091,9 @@
       "source_file": "README.md",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_license",
-      "target": "readme_contribution",
-      "confidence_score": 1.0
+      "target": "readme_contribution"
     },
     {
       "relation": "contains",
@@ -6411,5 +6561,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c127cb8a0bb8b0c2b03e20286fe870844450484d"
+  "built_at_commit": "19fb776e73b56b52d04c85d247aea9e8b1b3006f"
 }
