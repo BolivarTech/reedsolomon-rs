@@ -1,7 +1,7 @@
 {
   "src/lib.rs": {
-    "mtime": 1782965964.885756,
-    "ast_hash": "5b4094e68bb7ba6d4af3485a17398036",
+    "mtime": 1782977448.311509,
+    "ast_hash": "48561d6ceeab18b7cc4836fb54c17fbe",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
