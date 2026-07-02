@@ -61,9 +61,14 @@
 //! # Ok::<(), reedsolomon::RsError>(())
 //! ```
 //!
-//! Allocation is linear in input size and grown via `try_reserve`; an
-//! unsatisfiable allocation returns [`RsError::InvalidInput`] instead of
-//! aborting the process (memory-exhaustion DoS hardening).
+//! The **input-scaled** allocation — the output `Vec`, whose size grows with the
+//! input — is reserved with `try_reserve`; an unsatisfiable reservation returns
+//! [`RsError::InvalidInput`] instead of aborting the process. This bounds the
+//! memory-exhaustion DoS, whose only lever is a large input. The fixed per-block
+//! scratch buffers (syndromes, Λ, Chien roots, Forney magnitudes — each `≤ n ≤
+//! 255` bytes, independent of input size) use ordinary allocation and, like any
+//! Rust allocation, would abort on OOM; being constant-sized they are not a DoS
+//! vector.
 //!
 //! [`cryptovault`]: https://crates.io/crates/cryptovault
 
@@ -178,6 +183,23 @@ impl ReedSolomon {
     /// is accepted only if the result is a valid codeword within the correction
     /// capacity `t = parity_len / 2`; otherwise the decoder returns
     /// [`RsError::Uncorrectable`] and **never** wrong-but-plausible data.
+    ///
+    /// # Bounded-distance guarantee
+    /// This is a **bounded-distance decoder**, so the guarantee is precise:
+    /// - For **≤ `t`** genuine errors per block, recovery is **exact** — the
+    ///   returned bytes equal the original.
+    /// - When `decode` returns `Ok`, the result is always a valid codeword
+    ///   within Hamming distance `t` of the received block (enforced by the
+    ///   post-correction syndrome check), never arbitrary bytes.
+    /// - For **> `t`** errors it returns [`RsError::Uncorrectable`] **except** in
+    ///   the mathematically inherent, negligible-probability case where the
+    ///   corrupted block happens to fall within distance `t` of a *different*
+    ///   valid codeword (the default RS(255, 223) has minimum distance
+    ///   `d = 33`). This residual is a property of bounded-distance decoding
+    ///   shared by every RS decoder — it is **not** a mis-correction defect and
+    ///   cannot be removed by syndrome verification. Callers needing detection
+    ///   beyond `t` should layer an integrity check (e.g. an AEAD tag) above the
+    ///   FEC, as `cryptovault` does.
     ///
     /// # Caller responsibilities (raw path)
     ///
