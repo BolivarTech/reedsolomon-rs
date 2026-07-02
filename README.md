@@ -5,8 +5,7 @@ GF(2^8). Default code: **RS(255, 223)** (CCSDS) — 223 data + 32 parity bytes
 per 255-byte codeword, correcting up to **16 corrupted bytes per block**.
 
 > **Status: work in progress.** This is a name-reservation scaffold; the public
-> API is stable, the native GF(2^8) implementation is in progress. See
-> [`HANDOFF.md`](HANDOFF.md).
+> API is stable, the native GF(2^8) implementation is in progress.
 
 ## Why a dedicated crate
 
@@ -29,7 +28,7 @@ backstop, but this crate must be correct on its own.)
 use reedsolomon::ReedSolomon;
 
 let rs = ReedSolomon::default();            // RS(255, 223)
-let encoded = rs.encode(b"payload bytes");
+let encoded = rs.encode(b"payload bytes").unwrap();
 let decoded = rs.decode(&encoded, 13).unwrap();
 assert_eq!(&decoded, b"payload bytes");
 ```
