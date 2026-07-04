@@ -36,7 +36,7 @@ third-party FEC dependency**, but it stands alone and is reusable on its own.
 
 ```toml
 [dependencies]
-reedsolomon = "0.1"
+reedsolomon = "0.2"
 ```
 
 ## Quick Start
@@ -169,7 +169,7 @@ cargo audit
 
 ## Minimum Supported Rust Version
 
-Rust **1.87** (uses `usize::is_multiple_of`). CI builds and tests on 1.91.
+Rust **1.96**. CI builds and tests on 1.96.
 
 ## License
 

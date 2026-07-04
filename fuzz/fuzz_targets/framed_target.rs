@@ -1,5 +1,5 @@
 // Author: Julian Bolivar
-// Version: 0.1.0
+// Version: 0.2.0
 // Date: 2026-07-01
 //
 // Fuzz target: `ReedSolomon::decode_framed` must never panic, loop forever, or

@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
       - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@nextest
       - run: cargo nextest run --all-features
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
           components: clippy
       - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --all-targets --all-features -- -D warnings
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
           components: rustfmt
       - run: cargo fmt --check
 
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --all-features
 
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
       - run: cargo generate-lockfile
       - uses: taiki-e/install-action@cargo-audit
       - run: cargo audit
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.91"
+          toolchain: "1.96"
       - uses: Swatinem/rust-cache@v2
       - run: cargo doc --all-features --no-deps
         env:

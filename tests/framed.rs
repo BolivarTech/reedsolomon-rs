@@ -1,5 +1,5 @@
 // Author: Julian Bolivar
-// Version: 0.1.0
+// Version: 0.2.0
 // Date: 2026-06-29
 
 //! Integration tests for the framed-format API: KAT pinning `encode_framed`
